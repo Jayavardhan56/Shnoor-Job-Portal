@@ -117,7 +117,7 @@ def send_mail_async(subject, message, from_email, recipient_list, html_message=N
             if not email:
                 continue
             try:
-                send_mail(subject, message, from_email, [email], html_message=html_message, fail_silently=True)
+                send_mail(subject, message, from_email, [email], html_message=html_message, fail_silently=False)
             except Exception as e:
                 print(f"Error sending email to {email}: {e}")
     threading.Thread(target=run, daemon=True).start()
