@@ -36,6 +36,7 @@ def reply_query(request,pk):
             from_email=None,
             recipient_list=[query.email]
         )
+        query.delete()
         return Response({"message":"Reply Sent Successfully"})
     except Contact.DoesNotExist:
         return Response({"error":"Query Not Found"},status=404)

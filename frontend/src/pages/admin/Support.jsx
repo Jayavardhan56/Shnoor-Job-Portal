@@ -56,6 +56,20 @@ export default function Support(){
   };
 
 
+  const resolveQuery=async(id)=>{
+    try{
+      await api.post("/api/support/contact/delete/",{ids:[id]},{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      });
+      setQueries(queries.filter((q)=>q.id!==id));
+      alert("Query Resolved Successfully");
+    }catch(err){
+      alert("Failed to resolve query");
+    }
+  };
+
   const sendReply=async(id)=>{
     if(!replyMessage.trim())return;
     try{
@@ -71,9 +85,7 @@ export default function Support(){
           },
         }
       );
-      if(!resolved.includes(id)){
-        setResolved([...resolved,id]);
-      }
+      setQueries(queries.filter((q)=>q.id!==id));
       setReplyBox(null);
       setReplyMessage("");
       alert("Reply Sent Successfully");
@@ -170,7 +182,7 @@ export default function Support(){
                     :"bg-primary text-white hover:bg-secondary"
                   }`}>{resolved.includes(query.id)?"Sent":"Reply"}
                 </button>
-                <button className="px-5 py-3 border border-slate-200 rounded-xl text-[11px] font-bold uppercase tracking-[2px] text-slate-700 hover:bg-slate-50">
+                <button onClick={()=>resolveQuery(query.id)} className="px-5 py-3 border border-slate-200 rounded-xl text-[11px] font-bold uppercase tracking-[2px] text-slate-700 hover:bg-slate-50">
                   Resolve
                 </button>
               </div>
