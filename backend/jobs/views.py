@@ -68,30 +68,30 @@ def create_job(request):
         emails=[u.email for u in users if u.email]
         if emails:
             subject=f"New Career Opportunity: {title} | SHNOOR"
-            html=f"""
-            <div style='font-family:sans-serif;background:#f8fafc;padding:50px 20px;'>
-            <div style='max-width:600px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05);'>
-            <div style='background:#0f172a;padding:40px;text-align:center;'>
-            <h1 style='color:#fff;margin:0;font-size:28px;letter-spacing:-1px;'>SHNOOR</h1>
-            <p style='color:#94a3b8;margin:10px 0 0;font-size:14px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;'>Job Portal</p>
-            </div>
-            <div style='padding:40px;'>
-            <p style='color:#64748b;font-size:16px;line-height:1.6;'>Hello Talent,</p>
-            <p style='color:#1e293b;font-size:18px;line-height:1.6;font-weight:bold;'>A new opportunity has been posted by {user.username}:</p>
-            <div style='background:#f1f5f9;border-radius:16px;padding:30px;margin:30px 0;'>
-            <h2 style='color:#0f172a;margin:0 0 10px;font-size:22px;'>{title}</h2>
-            <p style='color:#475569;margin:0 0 20px;font-size:15px;'>{description}</p>
-            <p style='color:#0f172a;margin:0;font-size:14px;font-weight:bold;'>Salary: {salary}</p>
-            </div>
-            <div style='text-align:center;'>
-            <a href='http://localhost:5173/browse-jobs' style='display:inline-block;padding:18px 40px;background:#0f172a;color:#fff;text-decoration:none;border-radius:14px;font-weight:bold;font-size:14px;text-transform:uppercase;letter-spacing:1px;'>View & Apply Now</a>
-            </div>
-            <p style='color:#94a3b8;font-size:12px;text-align:center;margin-top:40px;'>This is an automated notification from SHNOOR Job Portal.</p>
-            </div>
-            </div>
-            </div>
-            """
-            send_mail_async(subject,"",None,emails,html_message=html)
+        html=f"""
+        <div style='font-family:sans-serif;background:#f8fafc;padding:50px 20px;'>
+        <div style='max-width:600px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05);'>
+        <div style='background:#0f172a;padding:40px;text-align:center;'>
+        <h1 style='color:#fff;margin:0;font-size:28px;letter-spacing:-1px;'>SHNOOR</h1>
+        <p style='color:#94a3b8;margin:10px 0 0;font-size:14px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;'>Job Portal</p>
+        </div>
+        <div style='padding:40px;'>
+        <p style='color:#64748b;font-size:16px;line-height:1.6;'>Hello Talent,</p>
+        <p style='color:#1e293b;font-size:18px;line-height:1.6;font-weight:bold;'>A new opportunity has been posted by {user.username}:</p>
+        <div style='background:#f1f5f9;border-radius:16px;padding:30px;margin:30px 0;'>
+        <h2 style='color:#0f172a;margin:0 0 10px;font-size:22px;'>{title}</h2>
+        <p style='color:#475569;margin:0 0 20px;font-size:15px;'>{description}</p>
+        <p style='color:#0f172a;margin:0;font-size:14px;font-weight:bold;'>Salary: {salary}</p>
+        </div>
+        <div style='text-align:center;'>
+        <a href='http://localhost:5173/browse-jobs' style='display:inline-block;padding:18px 40px;background:#0f172a;color:#fff;text-decoration:none;border-radius:14px;font-weight:bold;font-size:14px;text-transform:uppercase;letter-spacing:1px;'>View & Apply Now</a>
+        </div>
+        <p style='color:#94a3b8;font-size:12px;text-align:center;margin-top:40px;'>This is an automated notification from SHNOOR Job Portal.</p>
+        </div>
+        </div>
+        </div>
+        """
+        send_mail_async(subject,"",None,emails,html_message=html)
     return Response({"message":"Job Created Successfully","job_id":job.id},status=201)
 
 @api_view(['GET'])
