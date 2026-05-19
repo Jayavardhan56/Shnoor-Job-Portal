@@ -8,6 +8,7 @@ export default function Support(){
   const[replyMessage,setReplyMessage]=useState("");
   const[sending,setSending]=useState(false);
   const[resolved,setResolved]=useState([]);
+  const[deleting,setDeleting]=useState(false);
   const token=sessionStorage.getItem("token");
   useEffect(()=>{
     const fetchQueries=async()=>{
@@ -34,6 +35,7 @@ export default function Support(){
   };
   const deleteSelected=async()=>{
     if(selected.length===0)return;
+    setDeleting(true);
     try{
       await api.post("/api/support/contact/delete/",{ids:selected},{
         headers:{
@@ -48,6 +50,8 @@ export default function Support(){
       alert("Queries Deleted Successfully");
     }catch(err){
       alert("Failed To Delete Queries");
+    }finally{
+      setDeleting(false);
     }
   };
 
@@ -90,9 +94,9 @@ export default function Support(){
           </p>
         </div>
         {selected.length>0&&(
-          <button onClick={deleteSelected}
-            className="px-5 py-3 bg-red-500 text-white rounded-xl text-[11px] font-bold uppercase tracking-[2px] hover:bg-red-600">
-            Delete Selected
+          <button onClick={deleteSelected} disabled={deleting}
+            className="px-5 py-3 bg-red-500 text-white rounded-xl text-[11px] font-bold uppercase tracking-[2px] hover:bg-red-600 disabled:opacity-50">
+            {deleting?"Deleting...":"Delete Selected"}
           </button>
         )}
       </div>
@@ -183,8 +187,8 @@ export default function Support(){
                     <button
                       onClick={()=>sendReply(query.id)}
                       disabled={sending}
-                      className="px-6 py-3 bg-teal-500 text-white rounded-xl text-[11px] font-bold uppercase tracking-[2px] hover:bg-teal-600">
-                      {sending?"Sending":"Send Reply"}
+                      className="px-6 py-3 bg-teal-500 text-white rounded-xl text-[11px] font-bold uppercase tracking-[2px] hover:bg-teal-600 disabled:opacity-50">
+                      {sending?"Sending...":"Send Reply"}
                     </button>
                   </div>
                 </div>

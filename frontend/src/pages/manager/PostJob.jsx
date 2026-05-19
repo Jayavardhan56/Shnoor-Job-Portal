@@ -26,6 +26,7 @@ export default function PostJob(){
   const[editingDraftId,setEditingDraftId]=useState(null);
   const[scheduleDate,setScheduleDate]=useState("");
   const[scheduleTime,setScheduleTime]=useState("");
+  const[submitting,setSubmitting]=useState(false);
   
   const getMinDate=()=>{
     const now=new Date();
@@ -100,6 +101,7 @@ export default function PostJob(){
       const sched=new Date(scheduled_publish_at);
       if(sched<=new Date()){return alert("Scheduled date and time must be in the future!");}
     }
+    setSubmitting(true);
     try{
       await api.post("/api/jobs/create/",{...form,scheduled_publish_at:scheduled_publish_at?new Date(scheduled_publish_at).toISOString():"",is_draft:isDraft,deadline_days:deadlineDays,min_ats_score:minAtsScore,questions:questions},{headers:{Authorization:`Bearer ${token}`}});
       if(editingDraftId){
@@ -115,6 +117,7 @@ export default function PostJob(){
       fetchDrafts();
       fetchScheduledJobs();
     }catch(err){alert("Posting failed. Please check your connection.");}
+    finally{setSubmitting(false);}
   };
 
   return(
@@ -376,8 +379,8 @@ export default function PostJob(){
               <div className="pt-6 flex justify-between items-center border-t border-slate-100">
                 <button onClick={()=>setStep(1)} className="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition">Back to Details</button>
                 <div className="flex gap-3">
-                  <button onClick={()=>handleSubmit(true)} className="px-6 py-3 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition">Save as Draft</button>
-                  <button onClick={()=>handleSubmit(false)} className="px-8 py-3 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md">Publish Role</button>
+                  <button onClick={()=>handleSubmit(true)} disabled={submitting} className="px-6 py-3 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition disabled:opacity-50">{submitting ? "Saving..." : "Save as Draft"}</button>
+                  <button onClick={()=>handleSubmit(false)} disabled={submitting} className="px-8 py-3 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md disabled:opacity-50">{submitting ? "Publishing..." : "Publish Role"}</button>
                 </div>
               </div>
             </div>

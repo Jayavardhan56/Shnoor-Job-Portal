@@ -14,7 +14,10 @@ export default function ManageJobs() {
   const [apps, setApps] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({ title: "", description: "", salary: "", skills: "", deadline: "" });
-  const [assessmentLink, setAssessmentLink] = useState("");
+  const [assessmentLink, setAssessmentLink] = useState(`${API_URL}/api/applications/submit-assessment/?application_id={app_id}&score=85&passing_score=70`);
+  const [sendingAssessment, setSendingAssessment] = useState(false);
+  const [exportingStage, setExportingStage] = useState(false);
+  const [exportingPipeline, setExportingPipeline] = useState(false);
   const [selectedJobIds, setSelectedJobIds] = useState([]);
   const [selectedApp, setSelectedApp] = useState(null);
   const [selectedAppIds, setSelectedAppIds] = useState([]);
@@ -139,8 +142,12 @@ export default function ManageJobs() {
   const handleExportStageExcel = () => {
     const stageApps = apps.filter(a => a.status === activeStatus);
     if (stageApps.length === 0) { alert("No data found in this stage."); return; }
-    const data = [["NAME", "EMAIL", "STATUS", "ATS SCORE"], ...stageApps.map(a => [a.username, a.email, activeStatus, a.ats_score + "%"])];
-    exportExcel(data, `${selectedJob.title}_${activeStatus}_Applicants`);
+    setExportingStage(true);
+    setTimeout(() => {
+      const data = [["NAME", "EMAIL", "STATUS", "ATS SCORE"], ...stageApps.map(a => [a.username, a.email, activeStatus, a.ats_score + "%"])];
+      exportExcel(data, `${selectedJob.title}_${activeStatus}_Applicants`);
+      setExportingStage(false);
+    }, 600);
   };
   const downloadReport = async () => {
     const doc = new jsPDF();
@@ -230,11 +237,15 @@ export default function ManageJobs() {
   };
   const triggerAssessment = async () => {
     if (!assessmentLink) return;
+    setSendingAssessment(true);
     try {
       await api.post("/api/applications/trigger-assessment/", { job_id: selectedJob.id, link: assessmentLink }, { headers: { Authorization: `Bearer ${token}` } });
       alert("Assessment invitations sent successfully.");
-      setAssessmentLink("");
-    } catch (err) { }
+    } catch (err) {
+      alert(err.response?.data?.error || "Failed to trigger assessment.");
+    } finally {
+      setSendingAssessment(false);
+    }
   };
   useEffect(() => {
     fetchJobs();
@@ -394,7 +405,7 @@ export default function ManageJobs() {
                     </div>
                     <div className="flex-[1.5] flex gap-4">
                       <input className="flex-1 px-6 py-4 bg-slate-50 border border-slate-200 rounded-xl text-base font-bold text-slate-700 outline-none focus:border-teal-500" value={assessmentLink} onChange={e => setAssessmentLink(e.target.value)} placeholder="e.g. https://shnoor.com/test-abc" />
-                      <button onClick={triggerAssessment} className="px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary transition-all">Send Now</button>
+                      <button onClick={triggerAssessment} disabled={sendingAssessment} className="px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary transition-all disabled:opacity-50">{sendingAssessment ? "Sending..." : "Send Now"}</button>
                     </div>
                   </div>
                 )}
@@ -405,10 +416,10 @@ export default function ManageJobs() {
                         <span className="text-[10px] font-black uppercase tracking-widest bg-slate-50 text-slate-500 px-3 py-1.5 rounded-lg border border-slate-100">{selectedAppIds.length} Selected</span>
                         <div className="h-4 w-px bg-slate-200" />
                         <div className="flex gap-2">
-                          <button onClick={() => handleBulkUpdateStatus('shortlisted')} className="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-slate-200">Shortlist</button>
-                          <button onClick={() => handleBulkUpdateStatus('interviewing')} className="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-slate-200">Interview</button>
-                          <button onClick={()=>handleBulkUpdateStatus('hired')} className="px-4 py-2 bg-[#2E8B87] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-md">Hire Now</button>
-                          <button onClick={() => handleBulkUpdateStatus('rejected')} className="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-red-100">Reject</button>
+                          <button onClick={() => handleBulkUpdateStatus('shortlisted')} disabled={bulkActionLoading} className="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-slate-200 disabled:opacity-50">Shortlist</button>
+                          <button onClick={() => handleBulkUpdateStatus('interviewing')} disabled={bulkActionLoading} className="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-slate-200 disabled:opacity-50">Interview</button>
+                          <button onClick={()=>handleBulkUpdateStatus('hired')} disabled={bulkActionLoading} className="px-4 py-2 bg-[#2E8B87] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-md disabled:opacity-50">Hire Now</button>
+                          <button onClick={() => handleBulkUpdateStatus('rejected')} disabled={bulkActionLoading} className="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-red-100 disabled:opacity-50">Reject</button>
                         </div>
                       </div>
                       <button onClick={() => setSelectedAppIds([])} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-all">Clear Selection</button>
@@ -420,7 +431,7 @@ export default function ManageJobs() {
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Candidate</p>
                     </div>
                     <div className="flex items-center gap-10">
-                      <button onClick={handleExportStageExcel} className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-xl font-bold text-[9px] uppercase tracking-widest hover:bg-slate-100 transition-all border border-slate-100"><FaFileExcel className="text-teal-600" /> Export Stage</button>
+                      <button onClick={handleExportStageExcel} disabled={exportingStage} className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-xl font-bold text-[9px] uppercase tracking-widest hover:bg-slate-100 transition-all border border-slate-100 disabled:opacity-50"><FaFileExcel className="text-teal-600" /> {exportingStage ? "Exporting..." : "Export Stage"}</button>
                       <div className="flex gap-20 mr-4">
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI ATS</p>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</p>

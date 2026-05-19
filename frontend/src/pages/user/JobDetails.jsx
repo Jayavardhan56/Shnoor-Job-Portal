@@ -181,11 +181,11 @@ export default function JobDetails(){
                 </div>
               )}
               <div className="flex gap-3">
-                <button onClick={()=>{if(currentStep===1){setShowModal(false);}else{setCurrentStep(1);}}} className="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-widest">{currentStep===1?'Cancel':'Back'}</button>
+                <button onClick={()=>{if(currentStep===1){setShowModal(false);}else{setCurrentStep(1);}}} className="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-widest">Cancel</button>
                 {currentStep===1?(
-                  <button onClick={()=>{if(!selectedResumeId){return alert('Please select a Resume');}if(validQuestions.length>0){setCurrentStep(2);}else{handleApply();}}} className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-teal-100">{validQuestions.length>0?'Next Step':'Submit'}</button>
+                  <button onClick={()=>{if(!selectedResumeId){return alert('Please select a Resume');}if(validQuestions.length>0){setCurrentStep(2);}else{handleApply();}}} disabled={submitting} className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-teal-100 disabled:opacity-50">{validQuestions.length>0?'Next Step':submitting?'Submitting...':'Submit'}</button>
                 ):(
-                  <button onClick={handleApply} className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-teal-100">Submit Application</button>
+                  <button onClick={handleApply} disabled={submitting} className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-teal-100 disabled:opacity-50">{submitting ? 'Submitting...' : 'Submit Application'}</button>
                 )}
               </div>
             </div>

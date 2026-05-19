@@ -24,6 +24,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
   const[activeApp,setActiveApp]=useState(null);
   const[chatWidgetView,setChatWidgetView]=useState("options");
   const[isDeleting,setIsDeleting]=useState(false);
+  const[submittingReview,setSubmittingReview]=useState(false);
   const messagesEndRef=useRef(null);
   useEffect(()=>{messagesEndRef.current?.scrollIntoView({behavior:"smooth"});},[messages]);
   const token=sessionStorage.getItem("token");
@@ -33,9 +34,12 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
           if(updated)setActiveApp(updated);}}}catch(err){}};
   useEffect(()=>{fetchApps();},[]);
   useEffect(()=>{if(showChat&&activeApp){openChat(activeApp);}},[activeApp]);
-  const handleReviewSubmit=async()=>{try{await api.post("/api/applications/reviews/post/",{job_id:selectedJobId,overall_rating:ratings.overall,technical_difficulty:ratings.technical,process_clarity:ratings.clarity,interviewer_behavior:ratings.behavior,review_text:reviewText},{headers:{Authorization:`Bearer ${token}`}});
+  const handleReviewSubmit=async()=>{
+    setSubmittingReview(true);
+    try{await api.post("/api/applications/reviews/post/",{job_id:selectedJobId,overall_rating:ratings.overall,technical_difficulty:ratings.technical,process_clarity:ratings.clarity,interviewer_behavior:ratings.behavior,review_text:reviewText},{headers:{Authorization:`Bearer ${token}`}});
       alert("Review posted successfully!");
-      setShowReviewModal(false); setReviewText(""); fetchApps();} catch(err){alert(err.response?.data?.error||"Failed to post review");}};
+      setShowReviewModal(false); setReviewText(""); fetchApps();} catch(err){alert(err.response?.data?.error||"Failed to post review");}
+    finally{setSubmittingReview(false);}};
   const openChat=async(app)=>{setSelectedAppForChat(app);
     setShowChat(true);
     setChatWidgetView("options");
@@ -152,7 +156,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
                 </div>
                 <div className="pt-4 border-t border-slate-100 flex gap-4">
                   {['interviewing','hired'].includes(activeApp.status)&&(<div className="flex-1">{activeApp.reviewed?(<div className="w-full py-3 bg-teal-50 text-teal-600 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-teal-100/50"><FaCheck size={12}/> Interview Reviewed</div>):(<button onClick={()=>{setSelectedJobId(activeApp.job_id);setShowReviewModal(true);}} className="w-full py-3 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-secondary transition-all shadow-lg shadow-slate-100"><FaCommentAlt size={12}/> Rate Experience</button>)}</div>)}
-                  <button onClick={()=>handleDeleteApp(activeApp.id)} disabled={isDeleting} className="px-6 py-3 border border-red-100 text-red-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-50 transition-all disabled:opacity-50">Delete Application</button>
+                  <button onClick={()=>handleDeleteApp(activeApp.id)} disabled={isDeleting} className="px-6 py-3 border border-red-100 text-red-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-50 transition-all disabled:opacity-50">{isDeleting ? "Deleting..." : "Delete Application"}</button>
                 </div>
               </div>
               {['shortlisted','interviewing'].includes(activeApp.status)&&(<button onClick={()=>openChat(activeApp)} className="absolute bottom-6 right-6 w-14 h-14 bg-teal-600 text-white rounded-full flex items-center justify-center shadow-xl shadow-teal-100 hover:bg-teal-700 transition-all"><FaCommentAlt size={20}/>{activeApp.has_unread&&<span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center font-bold">1</span>}</button>)}
@@ -181,7 +185,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Final Comments & Experience</p>
                 <textarea className="w-full p-6 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-900 min-h-[120px] outline-none focus:ring-2 focus:ring-teal-100 resize-none" placeholder="Share your detailed feedback..." value={reviewText} onChange={e=>setReviewText(e.target.value)} />
               </div>
-              <button onClick={handleReviewSubmit} className="w-full py-5 bg-teal-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-teal-100 hover:bg-teal-700 transition-all flex items-center justify-center gap-3"><FaCheckCircle /> Submit Detailed Review</button>
+              <button onClick={handleReviewSubmit} disabled={submittingReview} className="w-full py-5 bg-teal-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-teal-100 hover:bg-teal-700 transition-all flex items-center justify-center gap-3 disabled:opacity-50"><FaCheckCircle /> {submittingReview ? "Submitting..." : "Submit Detailed Review"}</button>
             </div>
           </div>
         </div>)}

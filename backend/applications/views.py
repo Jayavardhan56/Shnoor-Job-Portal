@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view,permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from applications.models import Application,InterviewReview
 from users.models import User,Resume,Profile
@@ -9,9 +9,64 @@ from django.core.mail import send_mail
 from django.conf import settings
 from groq import Groq
 from chat.models import ChatRoom,Message
+from django.http import HttpResponse
 import os,json
 
+def send_pipeline_stage_email(app, status):
+    if not app.user.email:return
+    status_titles={
+        'applied': f"Application Received: {app.job.title}",
+        'shortlisted': f"Good News! Shortlisted for {app.job.title}",
+        'assessment_pending': f"Action Required: Assessment - {app.job.title}",
+        'interviewing': f"Next Steps: Interview Invitation - {app.job.title}",
+        'hired': f"Congratulations! Hired for {app.job.title}",
+        'rejected': f"Application Status Update: {app.job.title}"
+    }
+    subj=status_titles.get(status, f"Application Status Update: {app.job.title}")
+    if status=='applied':
+        color="#0f172a"
+        title="Application Received"
+        desc=f"Thank you for applying to the <b>{app.job.title}</b> position. We've received your application and will review it shortly."
+    elif status=='shortlisted':
+        color="#22c55e"
+        title="You're Shortlisted!"
+        desc=f"We are excited to inform you that you have been shortlisted for the <b>{app.job.title}</b> position. Our AI Match Score evaluated your profile at <b>{app.ats_score}%</b>!"
+    elif status=='assessment_pending':
+        color="#3b82f6"
+        title="Assessment Pending"
+        desc=f"Please complete your technical assessment for the <b>{app.job.title}</b> position to proceed to the next stage."
+    elif status=='interviewing':
+        color="#0ea5e9"
+        title="Interview Invitation"
+        desc=f"Great news! You have been advanced to the interview stage for <b>{app.job.title}</b>. We will contact you soon to schedule your interview."
+    elif status=='hired':
+        color="#10b981"
+        title="Congratulations!"
+        desc=f"We are thrilled to offer you the position of <b>{app.job.title}</b>! Welcome to the team."
+    elif status=='rejected':
+        color="#ef4444"
+        title="Application Status Update"
+        desc=f"Thank you for your interest in the <b>{app.job.title}</b> position. After careful review, we regret to inform you that we will not be moving forward with your application at this time."
+    else:
+        return
+    html=f"""
+    <div style='font-family:sans-serif;background:#f8fafc;padding:50px 20px;'>
+    <div style='max-width:600px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05);'>
+    <div style='background:{color};padding:40px;text-align:center;'>
+    <h1 style='color:#fff;margin:0;font-size:28px;letter-spacing:-1px;'>{title}</h1>
+    </div>
+    <div style='padding:40px;'>
+    <p style='color:#64748b;font-size:16px;line-height:1.6;'>Hi {app.user.username},</p>
+    <p style='color:#1e293b;font-size:16px;line-height:1.6;'>{desc}</p>
+    <p style='color:#94a3b8;font-size:12px;text-align:center;margin-top:40px;'>Best Regards,<br><b>SHNOOR Recruitment Team</b></p>
+    </div>
+    </div>
+    </div>
+    """
+    send_mail(subj,"",None,[app.user.email],html_message=html,fail_silently=True)
+
 @api_view(['POST'])
+
 @permission_classes([IsAuthenticated])
 def apply_job(request):
     user=request.user
@@ -57,29 +112,7 @@ def apply_job(request):
         match_highlights=ai_res["highlights"]
         if score>=job.min_ats_score:
             status='shortlisted'
-            subj=f"Good News! You've been shortlisted for {job.title}"
-            html=f"""
-        <div style='font-family:sans-serif;background:#f8fafc;padding:50px 20px;'>
-        <div style='max-width:600px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05);'>
-        <div style='background:#22c55e;padding:40px;text-align:center;'>
-        <h1 style='color:#fff;margin:0;font-size:28px;letter-spacing:-1px;'>Congratulations!</h1>
-        <p style='color:#f0fdf4;margin:10px 0 0;font-size:14px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;'>You're Shortlisted</p>
-        </div>
-        <div style='padding:40px;'>
-        <p style='color:#64748b;font-size:16px;line-height:1.6;'>Hi {user.username},</p>
-        <p style='color:#1e293b;font-size:18px;line-height:1.6;font-weight:bold;'>We are excited to inform you that you have been shortlisted for the <b>{job.title}</b> position at SHNOOR Portal.</p>
-        <div style='background:#f1f5f9;border-radius:16px;padding:30px;margin:30px 0;text-align:center;'>
-        <p style='color:#64748b;margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:1px;font-weight:bold;'>Dynamic AI Match Score</p>
-        <h2 style='color:#22c55e;margin:0;font-size:48px;'>{score}%</h2>
-        </div>
-        <p style='color:#475569;font-size:15px;line-height:1.7;'>Our recruitment team will review your profile further and reach out regarding the next steps in our hiring process.</p>
-        <p style='color:#94a3b8;font-size:12px;text-align:center;margin-top:40px;'>Best Regards,<br><b>SHNOOR Recruitment Team</b></p>
-        </div>
-        </div>
-        </div>
-        """
-            send_mail(subj,"",None,[user.email],html_message=html,fail_silently=True)
-    Application.objects.create(
+    app=Application.objects.create(
         user=user,
         job=job,
         resume=resume_obj,
@@ -88,8 +121,10 @@ def apply_job(request):
         ai_analysis=ai_analysis,
         match_highlights=match_highlights,
         screening_answers=screening_data,
-        )
+    )
+    send_pipeline_stage_email(app, status)
     return Response({"message":"Applied Successfully"},status=201)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -148,36 +183,14 @@ def job_applicants(request,job_id):
 def update_status(request,app_id):
     try:
         app=Application.objects.get(id=app_id,job__created_by=request.user)
-        old_status=app.status
         new_status=request.data.get("status")
         app.status=new_status
         app.save()
-        if new_status=='shortlisted' and old_status!='shortlisted':
-            subj=f"Good News! You've been shortlisted for {app.job.title}"
-            html=f"""
-        <div style='font-family:sans-serif;background:#f8fafc;padding:50px 20px;'>
-        <div style='max-width:600px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05);'>
-        <div style='background:#22c55e;padding:40px;text-align:center;'>
-        <h1 style='color:#fff;margin:0;font-size:28px;letter-spacing:-1px;'>Congratulations!</h1>
-        <p style='color:#f0fdf4;margin:10px 0 0;font-size:14px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;'>You're Shortlisted</p>
-        </div>
-        <div style='padding:40px;'>
-        <p style='color:#64748b;font-size:16px;line-height:1.6;'>Hi {app.user.username},</p>
-        <p style='color:#1e293b;font-size:18px;line-height:1.6;font-weight:bold;'>We are excited to inform you that you have been shortlisted for the <b>{app.job.title}</b> position at SHNOOR Portal.</p>
-        <div style='background:#f1f5f9;border-radius:16px;padding:30px;margin:30px 0;text-align:center;'>
-        <p style='color:#64748b;margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:1px;font-weight:bold;'>Dynamic AI Match Score</p>
-        <h2 style='color:#22c55e;margin:0;font-size:48px;'>{app.ats_score}%</h2>
-        </div>
-        <p style='color:#475569;font-size:15px;line-height:1.7;'>Our recruitment team will review your profile further and reach out regarding the next steps in our hiring process.</p>
-        <p style='color:#94a3b8;font-size:12px;text-align:center;margin-top:40px;'>Best Regards,<br><b>SHNOOR Recruitment Team</b></p>
-        </div>
-        </div>
-        </div>
-        """
-            send_mail(subj,"",None,[app.user.email],html_message=html,fail_silently=True)
+        send_pipeline_stage_email(app, new_status)
         return Response({"message":"Status updated"})
     except Application.DoesNotExist:
         return Response({"error":"Application not found"},status=404)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -208,28 +221,30 @@ def trigger_assessment(request):
     if not job_id or not link:
         return Response({"error":"Required:job_id,link"},status=400)
     apps=Application.objects.filter(job_id=job_id,status='shortlisted')
-    emails=[a.user.email for a in apps if a.user.email]
-    if not emails:
+    if not apps.exists():
         return Response({"error":"No shortlisted candidates found."},status=400)
-    subj="Action Required: Assessment Link - SHNOOR"
-    html=f"""
-        <div style='font-family:sans-serif;background:#f8fafc;padding:50px 20px;'>
-        <div style='max-width:600px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05);'>
-        <div style='background:#0f172a;padding:40px;text-align:center;'>
-        <h1 style='color:#fff;margin:0;font-size:28px;letter-spacing:-1px;'>Assessment Center</h1>
-        </div>
-        <div style='padding:40px;'>
-        <p style='color:#64748b;font-size:16px;line-height:1.6;'>Hello Candidate,</p>
-        <p style='color:#1e293b;font-size:18px;line-height:1.6;font-weight:bold;'>It's time for the next phase of your application!</p>
-        <div style='text-align:center;margin:40px 0;'>
-        <a href='{link}' style='display:inline-block;padding:18px 40px;background:#0f172a;color:#fff;text-decoration:none;border-radius:14px;font-weight:bold;font-size:14px;text-transform:uppercase;letter-spacing:1px;'>Start Assessment</a>
-        </div>
-        <p style='color:#94a3b8;font-size:12px;text-align:center;margin-top:40px;'>Best Regards,<br><b>SHNOOR Recruitment Team</b></p>
-        </div>
-        </div>
-        </div>
-        """
-    send_mail(subj,"",None,emails,html_message=html,fail_silently=True)
+    for a in apps:
+        if a.user.email:
+            personalized_link=link.replace("{app_id}",str(a.id)).replace("{application_id}",str(a.id))
+            subj="Action Required: Assessment Link - SHNOOR"
+            html=f"""
+            <div style='font-family:sans-serif;background:#f8fafc;padding:50px 20px;'>
+            <div style='max-width:600px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05);'>
+            <div style='background:#0f172a;padding:40px;text-align:center;'>
+            <h1 style='color:#fff;margin:0;font-size:28px;letter-spacing:-1px;'>Assessment Center</h1>
+            </div>
+            <div style='padding:40px;'>
+            <p style='color:#64748b;font-size:16px;line-height:1.6;'>Hello Candidate,</p>
+            <p style='color:#1e293b;font-size:18px;line-height:1.6;font-weight:bold;'>It's time for the next phase of your application!</p>
+            <div style='text-align:center;margin:40px 0;'>
+            <a href='{personalized_link}' style='display:inline-block;padding:18px 40px;background:#0f172a;color:#fff;text-decoration:none;border-radius:14px;font-weight:bold;font-size:14px;text-transform:uppercase;letter-spacing:1px;'>Start Assessment</a>
+            </div>
+            <p style='color:#94a3b8;font-size:12px;text-align:center;margin-top:40px;'>Best Regards,<br><b>SHNOOR Recruitment Team</b></p>
+            </div>
+            </div>
+            </div>
+            """
+            send_mail(subj,"",None,[a.user.email],html_message=html,fail_silently=True)
     apps.update(status='assessment_pending')
     return Response({"message":"Assessment link sent"})
 
@@ -242,28 +257,59 @@ def bulk_update_status(request):
         return Response({"error":"application_ids and status required"},status=400)
     apps=Application.objects.filter(id__in=ids,job__created_by=request.user)
     count=apps.count()
-    apps.update(status=new_status)
+    for a in apps:
+        a.status=new_status
+        a.save()
+        send_pipeline_stage_email(a,new_status)
     return Response({"message":f"Updated {count} candidates to {new_status}"})
 
-@api_view(['POST'])
+@api_view(['GET','POST'])
+@permission_classes([AllowAny])
 def submit_assessment(request):
-    app_id=request.data.get("application_id")
-    score=request.data.get("score")
-    passing_score=request.data.get("passing_score",70)
+    if request.method=='GET':
+        app_id=request.query_params.get("application_id")
+        score=request.query_params.get("score")
+        passing_score=request.query_params.get("passing_score",70)
+    else:
+        app_id=request.data.get("application_id")
+        score=request.data.get("score")
+        passing_score=request.data.get("passing_score",70)
     if not app_id or score is None:
+        if request.method=='GET':
+            return HttpResponse("<h2>Invalid Request: application_id and score are required parameters.</h2>",status=400)
         return Response({"error":"application_id and score required"},status=400)
     try:
         app=Application.objects.get(id=app_id)
         app.assessment_score=score
         app.assessment_completed=True
-        if float(score)>=float(passing_score):
+        passed=float(score)>=float(passing_score)
+        if passed:
             app.status='interviewing'
         else:
-            app.status='assessment_completed'
+            app.status='rejected'
         app.save()
+        send_pipeline_stage_email(app,app.status)
+        if request.method=='GET':
+            status_text="PASSED" if passed else "FAILED"
+            msg="Congratulations! You have successfully passed the assessment and are advanced to the Interview stage." if passed else "Thank you for taking the assessment. Unfortunately, you did not meet the passing criteria for this position."
+            color="#10b981" if passed else "#ef4444"
+            html=f"""
+            <div style="font-family:sans-serif; text-align:center; padding:100px 20px; background:#f8fafc; min-height:100vh;">
+                <div style="max-width:500px; margin:0 auto; background:#fff; padding:50px; border-radius:24px; box-shadow:0 10px 30px rgba(0,0,0,0.05);">
+                    <h1 style="color:{color}; font-size:36px; margin-bottom:10px;">Assessment {status_text}</h1>
+                    <p style="color:#64748b; font-size:18px; line-height:1.6; margin-bottom:30px;">Score: <b>{score}%</b> (Passing Score: {passing_score}%)</p>
+                    <p style="color:#1e293b; font-size:16px; line-height:1.6; margin-bottom:40px;">{msg}</p>
+                    <span style="font-size:12px; color:#94a3b8;">SHNOOR Job Portal</span>
+                </div>
+            </div>
+            """
+            return HttpResponse(html)
         return Response({"message":"Assessment submitted","new_status":app.status})
     except Application.DoesNotExist:
+        if request.method=='GET':
+            return HttpResponse("<h2>Application not found</h2>",status=404)
         return Response({"error":"Application not found"},status=404)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
