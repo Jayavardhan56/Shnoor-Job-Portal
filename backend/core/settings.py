@@ -19,8 +19,15 @@ SECRET_KEY=os.getenv('SECRET_KEY', 'django-insecure-flqb)bawvs8a4hzj(k+e-%f=@!gn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG=True
 
-
-ALLOWED_HOSTS=['*']
+CSRF_TRUSTED_ORIGINS = [
+    "https://shnoor-job-portal-backend.onrender.com",
+    "http://localhost:5173",
+]
+ALLOWED_HOSTS = [
+    "shnoor-job-portal-backend.onrender.com",
+    "localhost",
+    "127.0.0.1"
+]
 
 
 # Application definition
