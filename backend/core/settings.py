@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load local environment variables from .env file
 load_dotenv()
@@ -85,14 +86,16 @@ CHANNEL_LAYERS={
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES={
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'job_portal',
-        'USER':'postgres',
-        'PASSWORD':'281103',
-        'HOST':'localhost',
-        'PORT':'5432',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'job_portal',
+    #     'USER':'postgres',
+    #     'PASSWORD':'281103',
+    #     'HOST':'localhost',
+    #     'PORT':'5432',
+    # }
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"))
 }
 
 
@@ -153,4 +156,4 @@ EMAIL_PORT=587
 EMAIL_USE_TLS=True
 EMAIL_HOST_USER=os.getenv('EMAIL_HOST_USER','jayavardhankonathala@gmail.com')
 EMAIL_HOST_PASSWORD=os.getenv('EMAIL_HOST_PASSWORD','')
-DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
