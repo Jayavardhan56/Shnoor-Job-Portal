@@ -153,7 +153,7 @@ export default function ManageManagers(){
                        <p className="text-teal-600 font-bold text-base">{selectedJob.skills}</p>
                     </div>
                     <div className="space-y-3">
-                       <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Compensation</p>
+                       <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Salary</p>
                        <p className="text-slate-900 font-bold text-base">{selectedJob.salary}</p>
                     </div>
                     <div className="space-y-3">
