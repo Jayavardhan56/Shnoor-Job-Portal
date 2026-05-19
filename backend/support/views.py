@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
-from django.core.mail import send_mail
+from users.utils import send_mail_async
 from django.conf import settings
 from .models import Contact
 from .serializers import ContactSerializer
@@ -30,12 +30,11 @@ def reply_query(request,pk):
     try:
         query=Contact.objects.get(id=pk)
         reply=request.data.get("message")
-        send_mail(
+        send_mail_async(
             subject="Shnoor Support Response",
             message=reply,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[query.email],
-            fail_silently=False
+            from_email=None,
+            recipient_list=[query.email]
         )
         return Response({"message":"Reply Sent Successfully"})
     except Contact.DoesNotExist:
