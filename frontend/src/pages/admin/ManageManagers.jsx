@@ -49,6 +49,15 @@ export default function ManageManagers(){
     }
   };
 
+  const approvePassword=async(id)=>{
+    try{
+      await api.post(`/api/admin/approve-password/${id}/`,{},{headers:{Authorization:`Bearer ${token}`}});
+      fetchManagers();
+    }catch(err){
+      console.log(err);
+    }
+  };
+
   const deleteManager=async(id)=>{
     if(!window.confirm("Are you sure you want to remove this manager?"))return;
     try{
@@ -391,6 +400,12 @@ export default function ManageManagers(){
                   <div>
                     <p className="font-bold text-lg text-slate-900 group-hover:text-teal-600 transition-colors">{m.username}</p>
                     <p className="text-sm font-bold text-slate-400 mt-1">{m.organization_name || m.email}</p>
+                    {m.has_pending_password && (
+                      <span className="text-[10px] font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2 mt-1">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                        Password Reset Requested
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="text-center">
@@ -399,6 +414,9 @@ export default function ManageManagers(){
                   </span>
                 </div>
                 <div className="text-right space-x-8">
+                  {m.has_pending_password && (
+                    <button onClick={()=>approvePassword(m.id)} className="text-sm font-bold text-teal-600 uppercase tracking-widest hover:underline">Approve PW</button>
+                  )}
                   {!m.is_approved && (
                     <button onClick={()=>approveManager(m.id)} className="text-sm font-bold text-teal-600 uppercase tracking-widest hover:underline">Approve</button>
                   )}

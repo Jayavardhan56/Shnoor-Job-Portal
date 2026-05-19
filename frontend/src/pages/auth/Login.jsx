@@ -2,12 +2,13 @@ import {useState,useEffect} from "react";
 import {useNavigate,Link} from "react-router-dom";
 import api from "../../api";
 import logo from "../../assets/logo.png";
-import {FaArrowLeft,FaSun,FaMoon,FaLeaf} from "react-icons/fa";
+import {FaArrowLeft,FaSun,FaMoon,FaLeaf,FaEye,FaEyeSlash} from "react-icons/fa";
 
 export default function Login(){
   const navigate=useNavigate();
   const[form,setForm]=useState({email:"",password:""});
   const[loading,setLoading]=useState(false);
+  const[showPassword,setShowPassword]=useState(false);
   const[theme,setTheme]=useState(localStorage.getItem("theme")||"light");
   const toggleTheme=()=>{
     const next=theme==="light"?"dark":"light";
@@ -76,7 +77,12 @@ export default function Login(){
             </div>
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Password</label>
-              <input type="password" placeholder="••••••••" value={form.password} onChange={(e)=>setForm({...form,password:e.target.value})} className="w-full p-5 border border-slate-200 rounded-xl outline-none focus:border-teal-500 transition-all text-base font-medium" style={{backgroundColor:theme==="dark"?"#121212":"#ffffff",color:theme==="dark"?"#ffffff":"#0f172a"}}/>
+              <div className="relative">
+                <input type={showPassword?"text":"password"} placeholder="••••••••" value={form.password} onChange={(e)=>setForm({...form,password:e.target.value})} className="w-full p-5 pr-14 border border-slate-200 rounded-xl outline-none focus:border-teal-500 transition-all text-base font-medium" style={{backgroundColor:theme==="dark"?"#121212":"#ffffff",color:theme==="dark"?"#ffffff":"#0f172a"}}/>
+                <button type="button" onClick={()=>setShowPassword(!showPassword)} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-600 transition">
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex justify-between items-center mt-6 mb-10">
@@ -84,7 +90,7 @@ export default function Login(){
               <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"/>
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Keep me signed in</span>
             </label>
-            <span className="text-xs font-bold text-teal-600 hover:text-teal-700 cursor-pointer uppercase tracking-wider transition">Forgot Password?</span>
+            <Link to="/forgot-password" className="text-xs font-bold text-teal-600 hover:text-teal-700 uppercase tracking-wider transition">Forgot Password?</Link>
           </div>
           <button onClick={handleLogin} disabled={loading} className="w-full py-5 bg-primary text-white rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-secondary transition-all shadow-lg active:scale-95 disabled:opacity-50">
             {loading?"Signing in...":"Login"}

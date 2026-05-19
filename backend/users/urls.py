@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view, register_view, get_managers, approve_manager,get_all_users, delete_user, bulk_delete_users, delete_manager, bulk_delete_managers, update_profile,upload_resume, get_profile, get_resumes, delete_resume, rename_resume, ats_score, request_password_change, approve_password_change, get_user_profile, delete_account, manage_company_profile, get_public_company_profile
+from .views import login_view, register_view, get_managers, approve_manager,get_all_users, delete_user, bulk_delete_users, delete_manager, bulk_delete_managers, update_profile,upload_resume, get_profile, get_resumes, delete_resume, rename_resume, ats_score, request_password_change, approve_password_change, get_user_profile, delete_account, manage_company_profile, get_public_company_profile, forgot_password_view
 
 urlpatterns=[
     path('login/',login_view),
@@ -19,6 +19,7 @@ urlpatterns=[
     path('profile/resume/rename/<int:id>/', rename_resume),
     path('profile/request-password/',request_password_change),
     path('admin/approve-password/<int:id>/',approve_password_change),
+    path('forgot-password/', forgot_password_view),
     path('user-profile/<int:id>/',get_user_profile),
     path('profile/delete/',delete_account),
     path('ats-score/',ats_score),

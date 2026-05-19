@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from jobs.models import Job
-from django.core.mail import send_mail
+from users.utils import send_mail_async
 from users.models import User
 from applications.models import Application
 from django.utils import timezone
@@ -91,7 +91,7 @@ def create_job(request):
         </div>
         </div>
         """
-        send_mail(subject,"",None,emails,html_message=html,fail_silently=True)
+        send_mail_async(subject,"",None,emails,html_message=html)
     return Response({"message":"Job Created Successfully","job_id":job.id},status=201)
 
 @api_view(['GET'])
@@ -301,7 +301,7 @@ def bulk_delete_jobs(request):
                 </div>
                 </div>
                 """
-                send_mail(subject,"",None,emails,html_message=html,fail_silently=True)
+                send_mail_async(subject,"",None,emails,html_message=html)
             job.delete()
         except Job.DoesNotExist:pass
     return Response({"message":"Bulk deleted"})
@@ -419,7 +419,7 @@ def delete_job(request,id):
             </div>
             </div>
             """
-            send_mail(subject,"",None,emails,html_message=html,fail_silently=True)
+            send_mail_async(subject,"",None,emails,html_message=html)
         job.delete()
         return Response({"message":"Job deleted"})
     except Job.DoesNotExist:

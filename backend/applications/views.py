@@ -4,8 +4,7 @@ from rest_framework.response import Response
 from applications.models import Application,InterviewReview
 from users.models import User,Resume,Profile
 from jobs.models import Job,JobQuestion
-from users.utils import extract_text,get_advanced_ai_analysis
-from django.core.mail import send_mail
+from users.utils import extract_text,get_advanced_ai_analysis,send_mail_async
 from django.conf import settings
 from groq import Groq
 from chat.models import ChatRoom,Message
@@ -18,6 +17,7 @@ def send_pipeline_stage_email(app, status):
         'applied': f"Application Received: {app.job.title}",
         'shortlisted': f"Good News! Shortlisted for {app.job.title}",
         'assessment_pending': f"Action Required: Assessment - {app.job.title}",
+        'assessment_completed': f"Assessment Completed: {app.job.title}",
         'interviewing': f"Next Steps: Interview Invitation - {app.job.title}",
         'hired': f"Congratulations! Hired for {app.job.title}",
         'rejected': f"Application Status Update: {app.job.title}"
@@ -35,6 +35,10 @@ def send_pipeline_stage_email(app, status):
         color="#3b82f6"
         title="Assessment Pending"
         desc=f"Please complete your technical assessment for the <b>{app.job.title}</b> position to proceed to the next stage."
+    elif status=='assessment_completed':
+        color="#8b5cf6"
+        title="Assessment Completed"
+        desc=f"Thank you for completing the assessment for the <b>{app.job.title}</b> position. Your score is <b>{app.assessment_score}%</b>. We will review your results and contact you for the next steps."
     elif status=='interviewing':
         color="#0ea5e9"
         title="Interview Invitation"
@@ -63,7 +67,7 @@ def send_pipeline_stage_email(app, status):
     </div>
     </div>
     """
-    send_mail(subj,"",None,[app.user.email],html_message=html,fail_silently=True)
+    send_mail_async(subj,"",None,[app.user.email],html_message=html)
 
 @api_view(['POST'])
 
@@ -244,7 +248,7 @@ def trigger_assessment(request):
             </div>
             </div>
             """
-            send_mail(subj,"",None,[a.user.email],html_message=html,fail_silently=True)
+            send_mail_async(subj,"",None,[a.user.email],html_message=html)
     apps.update(status='assessment_pending')
     return Response({"message":"Assessment link sent"})
 

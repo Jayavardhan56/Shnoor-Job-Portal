@@ -135,7 +135,19 @@ def delete_resume(request,id):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_managers(request):
-    return Response(User.objects.filter(role="manager").values("id","username","email","organization_name","is_approved"))
+    managers=User.objects.filter(role="manager")
+    data=[]
+    for m in managers:
+        p=Profile.objects.filter(user=m).first()
+        data.append({
+            "id":m.id,
+            "username":m.username,
+            "email":m.email,
+            "organization_name":m.organization_name,
+            "is_approved":m.is_approved,
+            "has_pending_password":bool(p.pending_password) if p else False
+        })
+    return Response(data)
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -204,6 +216,22 @@ def approve_password_change(request,id):
         profile.pending_password=""
         profile.save()
     return Response({"message":"Password updated"})
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def forgot_password_view(request):
+    email=request.data.get("email")
+    password=request.data.get("password")
+    if not email or not password:
+        return Response({"error":"Email and new password are required"},status=400)
+    user=User.objects.filter(email=email).first()
+    if not user:
+        return Response({"error":"User with this email does not exist"},status=404)
+    profile,created=Profile.objects.get_or_create(user=user)
+    profile.pending_password=password
+    profile.save()
+    return Response({"message":"Password reset request submitted. Please wait for admin approval."})
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

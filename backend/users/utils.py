@@ -108,3 +108,16 @@ def calculate_profile_strength(profile):
     if profile.skills and (profile.skills.get('technical') or profile.skills.get('soft')):score+=20
     if profile.projects:score+=10
     return min(score,100)
+
+def send_mail_async(subject, message, from_email, recipient_list, html_message=None):
+    import threading
+    from django.core.mail import send_mail
+    def run():
+        for email in recipient_list:
+            if not email:
+                continue
+            try:
+                send_mail(subject, message, from_email, [email], html_message=html_message, fail_silently=True)
+            except Exception as e:
+                print(f"Error sending email to {email}: {e}")
+    threading.Thread(target=run, daemon=True).start()
