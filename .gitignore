@@ -1,4 +1,3 @@
-# Backend Python
 backend/venv/
 backend/__pycache__/
 backend/*.pyc
@@ -7,14 +6,13 @@ backend/.env
 backend/media/
 backend/staticfiles/
 
-# Frontend Node
 frontend/node_modules/
 frontend/dist/
 frontend/.env
 
-# OS files
 .DS_Store
 Thumbs.db
 
-# VS Code
+__pycache__/
+*.pyc
 .vscode/
