@@ -22,7 +22,8 @@ DEBUG=True
 CSRF_TRUSTED_ORIGINS = [
     "https://shnoor-job-portal-backend.onrender.com",
     "http://localhost:5173",
-    "https://shnoor-job-portal.vercel.app/"
+    "https://shnoor-job-portal.vercel.app/",
+    "https://shnoor-job-portal-production.up.railway.app/",
 ]
 ALLOWED_HOSTS = [
     # "shnoor-job-portal-backend.onrender.com",
@@ -67,6 +68,9 @@ MIDDLEWARE=[
 CORS_ALLOW_ALL_ORIGINS=True
 
 ROOT_URLCONF='core.urls'
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 TEMPLATES=[
     {
