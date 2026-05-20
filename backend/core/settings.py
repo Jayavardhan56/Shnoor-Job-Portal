@@ -17,7 +17,7 @@ BASE_DIR=Path(__file__).resolve().parent.parent
 SECRET_KEY=os.getenv('SECRET_KEY', 'django-insecure-flqb)bawvs8a4hzj(k+e-%f=@!gnlrn_pjlxo99nz2cw_x2_qn')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG=True
+DEBUG=os.environ.get("DEBUG", "False") == "True"
 
 CSRF_TRUSTED_ORIGINS = [
     "https://shnoor-job-portal-backend.onrender.com",
@@ -56,6 +56,7 @@ INSTALLED_APPS=[
 ]
 
 MIDDLEWARE=[
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,6 +143,8 @@ TIME_ZONE='UTC'
 USE_I18N=True
 
 USE_TZ=True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Static files (CSS, JavaScript, Images)
