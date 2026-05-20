@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const API_URL=import.meta.env.VITE_API_URL||'https://shnoor-job-portal-backend.onrender.com';
+export const API_URL=import.meta.env.VITE_API_URL||'https://shnoor-job-portal-production.up.railway.app';
 const api=axios.create({baseURL:API_URL});
 api.interceptors.request.use((config)=>{
   const token=sessionStorage.getItem("token");
