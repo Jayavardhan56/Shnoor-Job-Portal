@@ -22,11 +22,14 @@ DEBUG=True
 CSRF_TRUSTED_ORIGINS = [
     "https://shnoor-job-portal-backend.onrender.com",
     "http://localhost:5173",
+    "https://shnoor-job-portal.vercel.app/"
 ]
 ALLOWED_HOSTS = [
-    "shnoor-job-portal-backend.onrender.com",
-    "localhost",
-    "127.0.0.1"
+    # "shnoor-job-portal-backend.onrender.com",
+    # "localhost",
+    # "127.0.0.1",
+    # ".northflank.app"
+    '*'
 ]
 
 
@@ -141,6 +144,7 @@ USE_TZ=True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL='static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 from datetime import timedelta
 
