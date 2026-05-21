@@ -469,12 +469,13 @@ export default function ManageJobs() {
                           </div>
                         </div>
                       </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            ) : (
+            </div>
+          </div>
+        ) : (
               <div className="h-[650px] flex flex-col items-center justify-center bg-white rounded-3xl border border-slate-100 shadow-sm text-center p-24">
                 <div className="w-24 h-24 bg-slate-50 rounded-3xl flex items-center justify-center mx-auto mb-10 text-slate-300 shadow-inner"><FaBriefcase size={40} /></div>
                 <h2 className="text-3xl font-black text-slate-900 font-['Plus_Jakarta_Sans']">Recruitment Pipeline</h2>
