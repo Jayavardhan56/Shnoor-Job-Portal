@@ -9,7 +9,9 @@ export default function Stats(){
       try{
         const res=await api.get("/api/analytics/public-stats/");
         setData(res.data);
-      }catch(err){}
+      }catch(err){
+        console.log(err);
+      }
     };
     fetchStats();
   },[]);
