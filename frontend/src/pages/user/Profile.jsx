@@ -95,7 +95,7 @@ export default function Profile() {
   );
 
   const sectionHeader = (title) => (
-    <div className="flex justify-between items-center border-b border-slate-200 pb-4 mb-8">
+    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-slate-200 pb-4 mb-8">
       <h3 className="text-lg font-bold text-slate-900">{title}</h3>
       <div className="flex gap-2">
         {isEditing ? (
@@ -122,7 +122,7 @@ export default function Profile() {
   return (
     <UserLayout>
       <div className="w-full min-h-[calc(100vh-73px)] bg-white flex flex-col font-sans">
-        <div className="px-8 py-6 border-b border-slate-200 flex justify-between items-center bg-white sticky top-0 z-10">
+        <div className="px-4 md:px-8 py-4 md:py-6 border-b border-slate-200 flex justify-between items-center bg-white sticky top-0 z-10">
           <div>
             <h1 className="text-2xl font-bold text-slate-900">User Profile</h1>
             <p className="text-sm text-slate-500">Manage your professional information and documents</p>
@@ -240,10 +240,10 @@ export default function Profile() {
                 <div className="space-y-12">
                   {isEditing && <button onClick={() => { const n = [...editForm.experiences]; n.push({ is_current: false }); setEditForm({ ...editForm, experiences: n }); }} className="text-teal-600 text-sm font-bold flex items-center gap-1 hover:underline mb-6"><FaPlus size={12} /> Add New Experience</button>}
                   {((isEditing ? editForm.experiences : profile.experiences) || []).length > 0 ? ((isEditing ? editForm.experiences : profile.experiences || [])).map((exp, i) => (
-                    <div key={i} className="relative border-l-2 border-slate-100 pl-8 ml-2 group">
+                    <div key={i} className="relative border-l-2 border-slate-100 pl-4 sm:pl-8 ml-1 sm:ml-2 group">
                       {isEditing ? (
                         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 bg-slate-50/50 p-6 rounded-lg border border-slate-100">
-                          <button onClick={() => { const n = [...editForm.experiences]; n.splice(i, 1); setEditForm({ ...editForm, experiences: n }); }} className="absolute top-4 right-4 text-red-400 hover:text-red-600 transition-all"><FaTrash size={14} /></button>
+                          <button onClick={() => { const n = [...editForm.experiences]; n.splice(i, 1); setEditForm({ ...editForm, experiences: n }); }} className="absolute -top-2 -right-2 bg-white p-1.5 border border-slate-200 text-red-400 hover:text-red-600 rounded-full shadow-sm z-10 transition-all"><FaTrash size={12} /></button>
                           <div className="col-span-1"><label className={labelC}>Role / Designation</label><input className={inputC} value={exp.role || ""} onChange={e => { const n = [...editForm.experiences]; n[i].role = e.target.value; setEditForm({ ...editForm, experiences: n }) }} /></div>
                           <div className="col-span-1"><label className={labelC}>Company Name</label><input className={inputC} value={exp.company || ""} onChange={e => { const n = [...editForm.experiences]; n[i].company = e.target.value; setEditForm({ ...editForm, experiences: n }) }} /></div>
                           <div className="col-span-1 md:col-span-2 flex items-center gap-3 py-1">
@@ -277,7 +277,7 @@ export default function Profile() {
                 <div className="space-y-12">
                   {((isEditing ? editForm.education : profile.education) || []).some(e => e.institution || isEditing) ? ((isEditing ? editForm.education : profile.education || [])).map((edu, i) => (
                     edu.institution || isEditing ? (
-                      <div key={i} className="border-l-2 border-slate-100 pl-8 ml-2">
+                      <div key={i} className="border-l-2 border-slate-100 pl-4 sm:pl-8 ml-1 sm:ml-2">
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[2px] mb-3">{edu.category}</p>
                         {isEditing ? (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 bg-slate-50/50 p-6 rounded-lg border border-slate-100">

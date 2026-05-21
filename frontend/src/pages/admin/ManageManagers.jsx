@@ -269,8 +269,8 @@ export default function ManageManagers(){
                 <p className="text-teal-600 text-xs font-bold uppercase tracking-[2px] mt-1">{details.manager.organization || "Independent Recruiter"}</p>
               </div>
             </div>
-            <div className="flex flex-col md:items-end gap-4">
-              <div className="relative">
+            <div className="flex flex-col md:items-end gap-4 w-full md:w-auto">
+              <div className="relative w-full">
                 <input 
                   type="text" 
                   placeholder="Search position or skills..." 
@@ -337,8 +337,8 @@ export default function ManageManagers(){
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Recruiter Directory</h1>
             <p className="text-slate-500 text-sm mt-2 font-bold">System-wide monitoring of hiring manager productivity</p>
           </div>
-          <div className="flex flex-col md:items-end gap-6">
-            <div className="relative">
+          <div className="flex flex-col md:items-end gap-6 w-full md:w-auto">
+            <div className="relative w-full">
               <input 
                 type="text" 
                 placeholder="Search position or skills..." 
@@ -380,21 +380,24 @@ export default function ManageManagers(){
             <div className="text-center">Account Status</div>
             <div className="text-right">Management</div>
           </div>
-          <div className="lg:hidden space-y-4">
+          <div className="lg:hidden space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
             {filteredManagers.map(m=>(
-              <div key={m.id} className={`p-5 rounded-2xl border border-slate-100 space-y-4 ${selM.includes(m.id)?'bg-teal-50/30':'bg-white'}`}>
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <input type="checkbox" checked={selM.includes(m.id)} onChange={()=>toggleM(m.id)} className="w-5 h-5 accent-teal-600 mt-1"/>
-                  <div>
-                  <p className="font-bold text-slate-900 text-lg">{m.username}</p>
-                  <p className="text-sm text-slate-400 font-bold">{m.organization_name || m.email}</p>
+              <div key={m.id} className={`p-5 rounded-2xl border border-slate-100 space-y-4 flex flex-col justify-between ${selM.includes(m.id)?'bg-teal-50/30':'bg-white'}`}>
+                <div>
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <input type="checkbox" checked={selM.includes(m.id)} onChange={()=>toggleM(m.id)} className="w-5 h-5 accent-teal-600 shrink-0"/>
+                      <div className="min-w-0">
+                        <p className="font-bold text-slate-900 text-lg truncate">{m.username}</p>
+                        <p className="text-sm text-slate-400 font-bold truncate">{m.organization_name || m.email}</p>
+                      </div>
+                    </div>
+                    <span className={`text-xs font-bold uppercase tracking-widest shrink-0 ${m.is_approved?"text-teal-600":"text-amber-600"}`}>
+                      {m.is_approved?"Verified":"Pending"}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <span className={`text-xs font-bold uppercase tracking-widest ${m.is_approved?"text-teal-600":"text-amber-600"}`}>
-                {m.is_approved?"Verified":"Pending"}</span>
-              </div>
-                <div className="flex flex-wrap gap-4 pt-2">
+                <div className="flex flex-wrap gap-4 pt-2 border-t border-slate-50">
                   {m.has_pending_password && (
                     <button onClick={()=>approvePassword(m.id)} className="text-xs font-bold text-teal-600 uppercase tracking-widest">
                       Approve PW

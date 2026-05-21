@@ -61,8 +61,8 @@ export default function ManageUsers(){
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">User Management</h1>
             <p className="text-slate-500 text-sm mt-2 font-bold">Comprehensive monitoring of global platform accounts</p>
           </div>
-          <div className="flex flex-col md:items-end gap-6">
-            <div className="relative">
+          <div className="flex flex-col md:items-end gap-6 w-full md:w-auto">
+            <div className="relative w-full">
               <input 
                 type="text" 
                 placeholder="Search position or skills..." 
@@ -104,7 +104,7 @@ export default function ManageUsers(){
             <div>Email & Reset Status</div>
             <div className="text-right">Management</div>
           </div>
-          <div className="lg:hidden space-y-4"> {filtered.length===0 && (
+          <div className="lg:hidden space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6"> {filtered.length===0 && (
             <div className="p-10 text-center text-slate-400 font-bold uppercase tracking-widest text-sm">No users found matching "{search}".</div>)}
             {filtered.map(u=>(
             <div key={u.id} className={`p-5 rounded-2xl border border-slate-100 space-y-4 ${selected.includes(u.id)?'bg-teal-50/30':'bg-white'}`}>

@@ -91,11 +91,11 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
   const RatingRow=({label,value,field})=>(<div className="space-y-3">
       <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{label}</p>
       <div className="flex gap-1.5 flex-wrap">
-        {[1,2,3,4,5,6,7,8,9,10].map(n=>(<button key={n} onClick={()=>setRatings({...ratings,[field]: n})} className={`w-9 h-9 rounded-lg font-bold text-xs transition-all border ${ratings[field] === n ? 'bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-100 scale-110' : 'bg-white text-slate-400 border-slate-100 hover:border-teal-200 hover:text-teal-600'}`}>{n}</button>))}
+        {[1,2,3,4,5,6,7,8,9,10].map(n=>(<button key={n} onClick={()=>setRatings({...ratings,[field]: n})} className={`w-7 h-7 sm:w-9 sm:h-9 rounded-lg font-bold text-[10px] sm:text-xs transition-all border ${ratings[field] === n ? 'bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-100 scale-110' : 'bg-white text-slate-400 border-slate-100 hover:border-teal-200 hover:text-teal-600'}`}>{n}</button>))}
       </div>
     </div>);
   return (<UserLayout>
-      <div className="mb-12">
+      <div className="mb-6 md:mb-12">
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">My Applications</h1>
         <p className="text-slate-500 text-sm mt-1 font-medium">Track your recruitment progress</p>
       </div>
@@ -256,8 +256,8 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
                   {file&&<span className="text-xs text-slate-500 font-bold max-w-[100px] truncate">{file.name}</span>}
                   <div className="relative">
                     <button type="button" onClick={()=>setShowEmojis(!showEmojis)} className="p-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-all">😊</button>
-                    {showEmojis&&(<div className="absolute bottom-12 right-0 z-50">
-                        <EmojiPicker onEmojiClick={(emojiData)=>{setNewMessage(prev=>prev+emojiData.emoji);setShowEmojis(false);}}/>
+                    {showEmojis&&(<div className="absolute bottom-12 right-0 z-50 max-w-[calc(100vw-32px)] w-[320px]">
+                        <EmojiPicker width="100%" onEmojiClick={(emojiData)=>{setNewMessage(prev=>prev+emojiData.emoji);setShowEmojis(false);}}/>
                       </div>)}
                   </div>
                   <input type="text" value={newMessage} onChange={(e)=>setNewMessage(e.target.value)} placeholder="Type your message..." className="flex-1 px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-teal-400 font-bold text-sm"/>

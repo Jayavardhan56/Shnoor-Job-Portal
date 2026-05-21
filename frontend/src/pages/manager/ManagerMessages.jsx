@@ -181,7 +181,7 @@ export default function ManagerMessages(){
           <h1 className="text-2xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">Student Support</h1>
           <p className="text-slate-500 text-sm">Manage student support messages and inquiries</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           <button onClick={()=>setCurrentView(currentView==="messages"?"analytics":"messages")} className={`px-4 py-2 border rounded-lg text-sm font-bold flex items-center gap-2 transition-all ${currentView==="analytics"?"bg-primary text-white border-primary":"bg-white border-slate-200 text-slate-700 hover:bg-slate-50"}`}><FaChartLine/> {currentView==="analytics"?"View Messages":"Analytics"}</button>
           {currentView==="messages"&&(
             <button onClick={markAllAsRead} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-slate-50 text-teal-600"><FaCheckDouble/> Mark All Read</button>
@@ -195,12 +195,12 @@ export default function ManagerMessages(){
             <button onClick={()=>setFilter("all")} className={`px-4 py-2 rounded-lg text-sm font-bold ${filter==="all"?"bg-primary text-white":"bg-slate-100 text-slate-600"}`}>All Messages</button>
             <button onClick={()=>setFilter("unread")} className={`px-4 py-2 rounded-lg text-sm font-bold ${filter==="unread"?"bg-primary text-white":"bg-slate-100 text-slate-600"}`}>Unread {notifications.filter(n=>n.has_unread).length>0&&`(${notifications.filter(n=>n.has_unread).length})`}</button>
           </div>
-          <div className="flex gap-2">
-            <select value={selectedJob} onChange={(e)=>setSelectedJob(e.target.value)} className="bg-white text-slate-900 border border-slate-200 rounded-lg p-2 text-sm">
+          <div className="flex gap-2 w-full md:w-auto">
+            <select value={selectedJob} onChange={(e)=>setSelectedJob(e.target.value)} className="bg-white text-slate-900 border border-slate-200 rounded-lg p-2 text-sm flex-1 min-w-0">
               <option value="all">Select Job</option>
               {jobs.map(j=><option key={j} value={j}>{j} ({notifications.filter(n=>n.job_title===j).length})</option>)}
             </select>
-            <select value={selectedStage} onChange={(e)=>setSelectedStage(e.target.value)} className="bg-white text-slate-900 border border-slate-200 rounded-lg p-2 text-sm">
+            <select value={selectedStage} onChange={(e)=>setSelectedStage(e.target.value)} className="bg-white text-slate-900 border border-slate-200 rounded-lg p-2 text-sm flex-1 min-w-0">
               <option value="all">Select Stage</option>
               {["pending","interviewing","shortlisted","hired","rejected"].map(s=>(
                 <option key={s} value={s}>{s.toUpperCase()} ({notifications.filter(n=>(selectedJob==="all"||n.job_title===selectedJob) && n.status===s).length})</option>
@@ -341,8 +341,8 @@ export default function ManagerMessages(){
                         <div className="relative">
                           <button type="button" onClick={()=>setShowEmojis(!showEmojis)} className="p-2 bg-white rounded-lg hover:bg-slate-200 transition-all">😊</button>
                           {showEmojis&&(
-                            <div className="absolute bottom-12 right-0 z-50">
-                              <EmojiPicker onEmojiClick={(emojiData)=>{setNewMessage(newMessage+emojiData.emoji);setShowEmojis(false);}} />
+                            <div className="absolute bottom-12 right-0 z-50 max-w-[calc(100vw-32px)] w-[320px]">
+                              <EmojiPicker width="100%" onEmojiClick={(emojiData)=>{setNewMessage(newMessage+emojiData.emoji);setShowEmojis(false);}} />
                             </div>
                           )}
                         </div>
