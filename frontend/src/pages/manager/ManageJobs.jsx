@@ -10,6 +10,7 @@ import { FaEdit, FaTrash, FaCheck, FaTimes, FaArrowLeft, FaBriefcase, FaPaperPla
 
 export default function ManageJobs() {
   const [jobs, setJobs] = useState([]);
+  const [showDetailMobile, setShowDetailMobile] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [apps, setApps] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -42,10 +43,11 @@ export default function ManageJobs() {
       setApps(res.data);
     } catch (err) { }
   };
-  const handleJobSelect = (j) => {
+  const handleJobSelect = (j, isManual = false) => {
     setSelectedJob(j);
     setIsEditing(false);
     fetchApplicants(j.id);
+    if (isManual) setShowDetailMobile(true);
   };
   const updateStatus = async (appId, status) => {
     try {
@@ -290,11 +292,11 @@ export default function ManageJobs() {
           )}
         </div>
         <div className="grid grid-cols-12 gap-6 lg:gap-10">
-          <div className="col-span-12 lg:col-span-3 space-y-6">
+          <div className={`col-span-12 lg:col-span-3 space-y-6 ${showDetailMobile ? 'hidden lg:block' : 'block'}`}>
             <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Job Openings</h2>
-            <div className="space-y-3">
+            <div className="space-y-3 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 lg:block lg:space-y-3">
               {jobs.map(j => (
-                <div key={j.id} onClick={() => handleJobSelect(j)} className={`p-6 rounded-2xl cursor-pointer border transition-all flex items-center gap-4 ${selectedJob?.id === j.id ? 'bg-slate-50 border-slate-900 shadow-sm' : 'bg-white border-slate-100 shadow-sm hover:border-slate-200'}`}>
+                <div key={j.id} onClick={() => handleJobSelect(j, true)} className={`p-6 rounded-2xl cursor-pointer border transition-all flex items-center gap-4 ${selectedJob?.id === j.id ? 'bg-slate-50 border-slate-900 shadow-sm' : 'bg-white border-slate-100 shadow-sm hover:border-slate-200'}`}>
                   <input type="checkbox" checked={selectedJobIds.includes(j.id)} onClick={(e) => e.stopPropagation()} onChange={() => toggleSelectJob(j.id)} className="w-5 h-5 rounded border-slate-300 text-slate-900" />
                   <div className="flex-1 truncate">
                     <h3 className={`font-bold text-base truncate font-['Plus_Jakarta_Sans'] ${selectedJob?.id === j.id ? 'text-slate-900' : 'text-slate-900'}`}>{j.title}</h3>
@@ -305,9 +307,12 @@ export default function ManageJobs() {
             </div>
             {selectedJobIds.length > 0 && <button onClick={deleteSelectedJobs} className="w-full py-5 bg-red-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-red-100">Delete Selected ({selectedJobIds.length})</button>}
           </div>
-          <div className="col-span-12 lg:col-span-9 space-y-10">
+          <div className={`col-span-12 lg:col-span-9 space-y-10 ${showDetailMobile ? 'block' : 'hidden lg:block'}`}>
             {selectedJob ? (
               <div className="space-y-10">
+                <button onClick={() => setShowDetailMobile(false)} className="lg:hidden flex items-center gap-2 px-5 py-3 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 uppercase tracking-widest bg-white">
+                  <FaArrowLeft size={10} /> Back to Openings
+                </button>
                 <div className="bg-white p-5 sm:p-12 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
                   <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-10 pb-10 border-b border-slate-100">
                     <div>
@@ -427,7 +432,43 @@ export default function ManageJobs() {
                       <button onClick={() => setSelectedAppIds([])} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-all shrink-0 self-end sm:self-auto">Clear Selection</button>
                     </div>
                   )}
-                  <div className="overflow-x-auto">
+                  <div className="md:hidden divide-y divide-slate-100 bg-white">
+                    <div className="p-4 flex justify-between items-center bg-slate-50/50 border-b border-slate-100">
+                      <div className="flex items-center gap-3">
+                        <input type="checkbox" onChange={toggleSelectAllApps} checked={selectedAppIds.length === apps.filter(a => a.status === activeStatus).length && selectedAppIds.length > 0} className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900" />
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Select All</span>
+                      </div>
+                      <button onClick={handleExportStageExcel} disabled={exportingStage} className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-600 rounded-lg font-bold text-[9px] uppercase tracking-widest border border-slate-100 disabled:opacity-50"><FaFileExcel className="text-teal-600" /> Export</button>
+                    </div>
+                    {apps.filter(a => a.status === activeStatus).map(a => (
+                      <div key={a.id} className={`p-4 space-y-3 hover:bg-slate-50/50 transition-all ${selectedAppIds.includes(a.id) ? 'bg-teal-50/30' : ''}`}>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <input type="checkbox" checked={selectedAppIds.includes(a.id)} onChange={() => toggleSelectApp(a.id)} className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 mt-1" />
+                            <div>
+                              <p className="font-bold text-slate-900 text-sm">{a.username}</p>
+                              <p className="text-[11px] text-slate-400">{a.email}</p>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded-lg text-[9px] font-bold tracking-tighter border border-slate-200">ID: {a.id}</span>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                          <button onClick={()=>setSelectedApp(a)} className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg font-bold text-[9px] uppercase tracking-widest transition-all border shadow-sm ${a.ats_score > 70 ? 'bg-[#2E8B87] text-white border-[#2E8B87]' : 'bg-slate-50 text-slate-600 border-slate-100'}`}>
+                            <FaRobot size={10}/> ATS: {a.ats_score}%
+                          </button>
+                          <div className="flex items-center gap-2">
+                            <button onClick={()=>navigate(`/manager/user-profile/${a.user_id}`)} className="px-3 py-1.5 bg-slate-50 text-slate-600 rounded-lg font-bold text-[9px] uppercase tracking-wider border border-slate-100 hover:bg-slate-100 transition-all">Profile</button>
+                            {a.resume ? (
+                              <a href={`${API_URL}${a.resume}`} target="_blank" className="px-3 py-1.5 bg-[#2E8B87] text-white rounded-lg font-bold text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1">CV</a>
+                            ) : (
+                              <span className="text-[9px] font-bold text-slate-300 uppercase italic">No CV</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="hidden md:block overflow-x-auto">
                     <div className="min-w-[800px]">
                       <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-white">
                         <div className="flex items-center gap-6">

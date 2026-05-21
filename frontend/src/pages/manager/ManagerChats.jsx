@@ -6,6 +6,7 @@ import { FaTrash } from "react-icons/fa";
 export default function ManagerChats(){
     const[chats,setChats]=useState([]);
     const[selectedChat,setSelectedChat]=useState(null);
+    const[showChatMobile,setShowChatMobile]=useState(false);
     const[messages,setMessages]=useState([]);
     const[newMessage,setNewMessage]=useState("");
     const token=sessionStorage.getItem("token");
@@ -81,13 +82,14 @@ export default function ManagerChats(){
             if(selectedChat?.room_id===roomId){
                 setSelectedChat(null);
                 setMessages([]);
+                setShowChatMobile(false);
             }
         }catch(err){console.log(err);}
     };
     return(
         <ManagerLayout>
-        <div className="h-[calc(100vh-40px)] flex gap-6">
-        <div className="w-[340px] bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="h-[calc(100vh-40px)] flex flex-col lg:flex-row gap-6">
+        <div className={`w-full lg:w-[340px] bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden ${showChatMobile ? 'hidden lg:block' : 'block'}`}>
           <div className="p-6 border-b border-slate-100">
             <h2 className="text-2xl font-bold text-slate-900">
               Recruiter Chats
@@ -100,7 +102,7 @@ export default function ManagerChats(){
             {chats.map(chat=>(
               <div
               key={chat.application_id}
-              onClick={()=>setSelectedChat(chat)}
+              onClick={()=>{setSelectedChat(chat);setShowChatMobile(true);}}
               className={`p-5 border-b border-slate-50 cursor-pointer transition-all hover:bg-slate-50 ${
                 selectedChat?.application_id===chat.application_id
                 ?"bg-teal-50 border-r-4 border-r-teal-500"
@@ -137,7 +139,7 @@ export default function ManagerChats(){
             ))}
           </div>
         </div>
-        <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+        <div className={`flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col ${showChatMobile ? 'flex' : 'hidden lg:flex'}`}>
           {!selectedChat?(
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
@@ -151,18 +153,21 @@ export default function ManagerChats(){
             </div>
           ):(
             <>
-              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-800">
-                    {selectedChat.username}
-                  </h2>
-                  <p className="text-sm text-slate-500 mt-1">
-                    {selectedChat.job_title}
-                  </p>
+              <div className="p-6 border-b border-slate-100">
+                <button onClick={() => setShowChatMobile(false)} className="lg:hidden mb-4 flex items-center gap-2 text-xs font-bold text-[#2E8B87] hover:underline">← Back to Chats</button>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-800">
+                      {selectedChat.username}
+                    </h2>
+                    <p className="text-sm text-slate-500 mt-1">
+                      {selectedChat.job_title}
+                    </p>
+                  </div>
+                  <span className="px-4 py-2 bg-teal-50 text-teal-600 rounded-2xl text-xs font-bold uppercase tracking-widest">
+                    Recruiter Chat
+                  </span>
                 </div>
-                <span className="px-4 py-2 bg-teal-50 text-teal-600 rounded-2xl text-xs font-bold uppercase tracking-widest">
-                  Recruiter Chat
-                </span>
               </div>
               <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50">
                 {messages.map(msg=>(

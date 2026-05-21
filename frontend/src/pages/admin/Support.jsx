@@ -96,7 +96,7 @@ export default function Support(){
   };
   return(
     <AdminLayout>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">
             Support Queries
@@ -113,7 +113,68 @@ export default function Support(){
         )}
       </div>
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="lg:hidden p-4 space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
+          {Array.isArray(queries)&&queries.map((query,i)=>(
+            <div key={i} className={`p-5 rounded-2xl border border-slate-100 space-y-4 flex flex-col justify-between ${selected.includes(query.id)?'bg-teal-50/30':'bg-white'}`}>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <input type="checkbox" checked={selected.includes(query.id)} onChange={()=>toggleSelect(query.id)}
+                    className="w-4 h-4 accent-teal-500"/>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">{query.name}</h3>
+                    <p className="text-xs text-slate-400 mt-0.5 break-all">#{query.id} • {query.email}</p>
+                  </div>
+                </div>
+                {resolved.includes(query.id)?(
+                  <span className="px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 text-[9px] font-bold uppercase tracking-wider">
+                    Sent
+                  </span>
+                ):(
+                  <span className="px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-600 text-[9px] font-bold uppercase tracking-wider">
+                    New
+                  </span>
+                )}
+              </div>
+              <div className="text-sm text-slate-600 bg-slate-50/50 p-3 rounded-xl border border-slate-100 break-all">
+                <p className="font-semibold text-[10px] text-slate-400 uppercase tracking-wider mb-1">Message</p>
+                {query.message}
+              </div>
+              <div className="flex gap-3 justify-end">
+                <button onClick={()=>setReplyBox(query.id)}
+                  disabled={resolved.includes(query.id)}
+                  className={`px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider ${
+                    resolved.includes(query.id)
+                    ?"bg-green-500 text-white cursor-not-allowed"
+                    :"bg-primary text-white hover:bg-secondary"
+                  }`}>{resolved.includes(query.id)?"Sent":"Reply"}
+                </button>
+                <button onClick={()=>resolveQuery(query.id)} className="px-4 py-2.5 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-wider text-slate-700 hover:bg-slate-50">
+                  Resolve
+                </button>
+              </div>
+              {replyBox===query.id&&(
+                <div className="pt-2">
+                  <div className="border border-slate-200 rounded-xl p-3 bg-slate-50">
+                    <textarea
+                      value={replyMessage}
+                      onChange={(e)=>setReplyMessage(e.target.value)}
+                      placeholder="Write your reply..."
+                      className="w-full h-20 border border-slate-200 rounded-lg p-3 text-xs outline-none resize-none focus:border-teal-500 bg-white"/>
+                    <div className="flex justify-end mt-3">
+                      <button
+                        onClick={()=>sendReply(query.id)}
+                        disabled={sending}
+                        className="px-4 py-2 bg-teal-500 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-teal-600 disabled:opacity-50">
+                        {sending?"Sending...":"Send Reply"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="hidden lg:block overflow-x-auto">
           <div className="min-w-[900px]">
             <div className="grid grid-cols-12 gap-4 px-8 py-4 bg-slate-50 border-b border-slate-200">
               <div className="col-span-1">

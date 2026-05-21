@@ -26,13 +26,13 @@ export default function UserDashboard(){
   },[]);
   return(
     <UserLayout>
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-10">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Welcome, {username}</h1>
           <p className="text-slate-500 mt-2 text-base font-bold uppercase tracking-widest">Candidate Recruitment Pulse</p>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
         {[
           {label:"Applied",val:stats.applied,color:"text-slate-900",bg:"bg-white",border:"border-slate-200"},
           {label:"Shortlisted",val:stats.shortlisted,color:"text-teal-600",bg:"bg-white",border:"border-slate-200"},

@@ -146,7 +146,7 @@ export default function ManageUsers(){
           </div>
           </div>))}
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="hidden lg:block divide-y divide-slate-100">
             {filtered.length===0 && <div className="p-16 text-center text-slate-400 font-bold uppercase tracking-widest text-sm">No users found matching "{search}".</div>}
             {filtered.map(u=>(
               <div key={u.id} className={`hidden lg:grid lg:grid-cols-[70px_1fr_1.5fr_1fr] items-center py-8 px-6 hover:bg-slate-50/50 transition-all group ${selected.includes(u.id) ? 'bg-teal-50/30' : ''}`}>

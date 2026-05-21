@@ -20,7 +20,7 @@ export default function Notifications() {
   return (
     <UserLayout>
       <div className="max-w-4xl mx-auto space-y-10">
-        <div className="flex justify-between items-end border-b border-slate-100 pb-10">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-end border-b border-slate-100 pb-10 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Notifications</h1>
             <p className="text-slate-500 font-bold text-xs uppercase tracking-widest mt-2">Stay updated with your applications</p>

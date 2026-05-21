@@ -183,7 +183,12 @@ export default function BrowseJobs(){
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6 max-h-[calc(100vh-2rem)] overflow-y-auto">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">All Filters</h2>
-                <button onClick={()=>{setSelectedLocations([]);setSelectedSkills([]);setSelectedWorkModes([]);setSelectedJobTypes([]);setSelectedCompanies([]);setSelectedExperience([]);setFilterApplied("all");setSortBy("newest");setQuery("");}} className="text-xs font-bold text-teal-600 hover:text-teal-700">Clear All</button>
+                <div className="flex items-center gap-3">
+                  <button onClick={()=>{setSelectedLocations([]);setSelectedSkills([]);setSelectedWorkModes([]);setSelectedJobTypes([]);setSelectedCompanies([]);setSelectedExperience([]);setFilterApplied("all");setSortBy("newest");setQuery("");}} className="text-xs font-bold text-teal-600 hover:text-teal-700">Clear All</button>
+                  <button onClick={()=>setShowFilters(false)} className="lg:hidden p-1 text-slate-400 hover:text-slate-600 transition" aria-label="Close filters">
+                    <FaTimes size={14}/>
+                  </button>
+                </div>
               </div>
               <div className="space-y-3">
                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sort By</h3>

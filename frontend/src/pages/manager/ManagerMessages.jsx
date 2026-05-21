@@ -10,6 +10,7 @@ export default function ManagerMessages(){
   const[selectedJob,setSelectedJob]=useState("all");
   const[selectedStage,setSelectedStage]=useState("all");
   const[activeChat,setActiveChat]=useState(null);
+  const[showChatMobile,setShowChatMobile]=useState(false);
   const[messages,setMessages]=useState([]);
   const[newMessage,setNewMessage]=useState("");
   const[file,setFile]=useState(null);
@@ -61,6 +62,7 @@ export default function ManagerMessages(){
       fetchNotifications();
       setActiveChat(null);
       setMessages([]);
+      setShowChatMobile(false);
     }catch(err){}
   };
   const closeChat=async(roomId)=>{
@@ -140,6 +142,7 @@ export default function ManagerMessages(){
   },[activeChat?.room_id]);
   const openChat=async(chat)=>{
     setActiveChat(chat);
+    setShowChatMobile(true);
     setSelectedJob(chat.job_title);
     setSelectedStage(chat.status);
     setFilter("all");
@@ -173,7 +176,7 @@ export default function ManagerMessages(){
   const jobs=[...new Set(notifications.map(n=>n.job_title))];
   return(
     <ManagerLayout>
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-6 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">Student Support</h1>
           <p className="text-slate-500 text-sm">Manage student support messages and inquiries</p>
@@ -187,7 +190,7 @@ export default function ManagerMessages(){
         </div>
       </div>
       {currentView==="messages"&&(
-        <div className="bg-white border border-slate-100 rounded-2xl shadow-sm mb-6 p-4 flex justify-between items-center">
+        <div className="bg-white border border-slate-100 rounded-2xl shadow-sm mb-6 p-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div className="flex gap-2">
             <button onClick={()=>setFilter("all")} className={`px-4 py-2 rounded-lg text-sm font-bold ${filter==="all"?"bg-primary text-white":"bg-slate-100 text-slate-600"}`}>All Messages</button>
             <button onClick={()=>setFilter("unread")} className={`px-4 py-2 rounded-lg text-sm font-bold ${filter==="unread"?"bg-primary text-white":"bg-slate-100 text-slate-600"}`}>Unread {notifications.filter(n=>n.has_unread).length>0&&`(${notifications.filter(n=>n.has_unread).length})`}</button>
@@ -206,7 +209,7 @@ export default function ManagerMessages(){
           </div>
         </div>
       )}
-      <div className="grid grid-cols-3 gap-6 h-[600px]">
+      <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 h-[600px]">
         {currentView==="analytics"?(
           <div className="col-span-3 border border-slate-100 rounded-2xl bg-white p-6 overflow-y-auto">
             <h2 className="text-xl font-bold text-slate-900 mb-6 font-['Plus_Jakarta_Sans']">Chat Analytics</h2>
@@ -261,7 +264,7 @@ export default function ManagerMessages(){
             </div>
           ):(
             <>
-              <div className="col-span-1 border border-slate-100 rounded-2xl bg-white overflow-y-auto">
+              <div className={`col-span-1 border border-slate-100 rounded-2xl bg-white overflow-y-auto ${showChatMobile ? 'hidden lg:block' : 'block'}`}>
                 <div className="p-4 border-b border-slate-100 font-bold text-slate-900 font-['Plus_Jakarta_Sans']">Messages ({filteredNotifs.length})</div>
                 {filteredNotifs.map(n=>(
                   <div key={n.room_id} onClick={()=>openChat(n)} className={`p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 transition-all flex items-center gap-3 ${activeChat?.room_id===n.room_id?"bg-slate-50":""}`}>
@@ -285,14 +288,16 @@ export default function ManagerMessages(){
                 ))}
                 {filteredNotifs.length===0&&<div className="text-center py-10 text-slate-400 text-sm">No messages found</div>}
               </div>
-              <div className="col-span-2 border border-slate-100 rounded-2xl bg-white flex flex-col h-[600px]">
+              <div className={`col-span-2 border border-slate-100 rounded-2xl bg-white flex flex-col h-[600px] ${showChatMobile ? 'flex' : 'hidden lg:flex'}`}>
                 {activeChat && filteredNotifs.some(n => n.room_id === activeChat.room_id) ? (
                   <>
-                    <div className="p-4 border-b border-slate-100 font-bold text-slate-900 flex justify-between items-center font-['Plus_Jakarta_Sans']">
-                      <div>
-                        <div>{activeChat.username} <span className="text-xs text-slate-400 font-normal">({activeChat.job_title})</span></div>
-                        <div className="text-[10px] text-slate-400 mt-0.5 font-bold uppercase">{formatLastActive(activeChat.latest_time)}</div>
-                      </div>
+                    <div className="p-4 border-b border-slate-100 font-bold text-slate-900 font-['Plus_Jakarta_Sans']">
+                      <button type="button" onClick={() => setShowChatMobile(false)} className="lg:hidden mb-4 flex items-center gap-2 text-xs font-bold text-[#2E8B87] hover:underline">← Back to Messages</button>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div>{activeChat.username} <span className="text-xs text-slate-400 font-normal">({activeChat.job_title})</span></div>
+                          <div className="text-[10px] text-slate-400 mt-0.5 font-bold uppercase">{formatLastActive(activeChat.latest_time)}</div>
+                        </div>
                       <div className="flex items-center gap-3">
                         {!activeChat.is_closed ? (
                           <button onClick={()=>closeChat(activeChat.room_id)} className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-bold hover:bg-red-600 hover:text-white transition-all">Close Chat</button>
@@ -300,6 +305,7 @@ export default function ManagerMessages(){
                           <button onClick={()=>deleteChat(activeChat.room_id)} className="text-red-500 hover:text-red-700 transition-all"><FaTrash size={16}/></button>
                         )}
                       </div>
+                    </div>
                     </div>
                     <div className="flex-1 p-4 overflow-y-auto space-y-4">
                       {messages.map((msg,idx)=>(

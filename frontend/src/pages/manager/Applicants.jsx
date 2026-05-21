@@ -92,7 +92,40 @@ export default function Applicants() {
         </div>
         <button onClick={downloadAllApplicants} className="w-full sm:w-auto px-8 py-4 bg-teal-50 text-teal-600 rounded-2xl font-bold hover:bg-teal-600 hover:text-white transition-all text-xs uppercase tracking-widest border border-teal-100 flex items-center justify-center gap-3 shadow-sm"><FaDownload />Export PDF Report</button>
       </div>
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="lg:hidden space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
+        {apps.map(a => (
+          <div key={a.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4 hover:border-teal-300 transition-all duration-300">
+            <div className="flex justify-between items-start gap-4">
+              <div>
+                <p className="font-bold text-slate-900 text-lg font-['Plus_Jakarta_Sans']">{a.username}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{a.email}</p>
+              </div>
+              <span className="px-3 py-1.5 bg-teal-50 text-teal-600 rounded-xl font-black text-xs border border-teal-100 shrink-0">{a.ats_score}% Match</span>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-50">
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Applied Role</p>
+                <p className="text-slate-700 font-bold text-sm mt-0.5">{a.job_title}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right">Status</p>
+                <span className={`inline-block px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider mt-1 ${a.status === 'hired' ? 'bg-teal-500 text-white' : a.status === 'shortlisted' ? 'bg-teal-50 text-teal-600 border border-teal-200' : a.status === 'rejected' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>{a.status}</span>
+              </div>
+            </div>
+            <div className="pt-2">
+              <button onClick={() => setSelectedApp(a)} className="w-full py-3 bg-white border border-slate-200 text-slate-500 rounded-xl hover:text-teal-600 hover:border-teal-400 hover:bg-teal-50 transition shadow-sm flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest">
+                <FaEye size={14} />
+                <span>Review Candidate</span>
+              </button>
+            </div>
+          </div>
+        ))}
+        {apps.length === 0 && (
+          <div className="py-12 text-center text-slate-400 text-sm">No applicants found</div>
+        )}
+      </div>
+
+      <div className="hidden lg:block bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[900px]">
           <thead className="bg-slate-50 text-slate-500 uppercase text-xs font-bold tracking-widest border-b border-slate-100">
@@ -135,28 +168,28 @@ export default function Applicants() {
       {selectedApp && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 backdrop-blur-sm bg-slate-500/20">
           <div className="bg-white w-full max-w-5xl max-h-[92vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col relative border border-slate-200">
-            <button onClick={() => setSelectedApp(null)} className="absolute top-8 right-8 w-12 h-12 bg-slate-50 text-slate-400 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all z-10 flex items-center justify-center shadow-sm"><FaTimes /></button>
-            <div className="p-6 sm:p-12 md:p-16 overflow-y-auto custom-scrollbar bg-white">
-              <div className="mb-12 border-b border-slate-100 pb-10">
+            <button onClick={() => setSelectedApp(null)} className="absolute top-4 right-4 sm:top-8 sm:right-8 w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 text-slate-400 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all z-10 flex items-center justify-center shadow-sm"><FaTimes /></button>
+            <div className="p-6 sm:p-10 md:p-16 overflow-y-auto custom-scrollbar bg-white">
+              <div className="mb-12 border-b border-slate-100 pb-10 pr-10 sm:pr-0">
                 <span className="text-teal-600 font-black text-xs uppercase tracking-[4px] mb-3 block">Recruitment Intelligence</span>
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">{selectedApp.username} <span className="text-slate-200 mx-4">/</span> <span className="text-teal-500">{selectedApp.ats_score}% Match</span></h2>
                 <p className="text-slate-500 font-bold text-base mt-2">{selectedApp.job_title} Candidate</p>
               </div>
               <div className="grid lg:grid-cols-2 gap-12">
                 <div className="space-y-12">
-                  <div className="bg-white p-10 rounded-2xl border border-slate-200 relative">
+                  <div className="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 relative">
                     <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-teal-100">Screening Impacted</div>
                     <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">EXECUTIVE SUMMARY & COMPARISON</h3>
                     <p className="text-slate-800 text-base leading-relaxed font-bold italic whitespace-pre-wrap">"{selectedApp.ai_analysis || "Analysis pending calibration."}"</p>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
+                    <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm">
                       <h3 className="text-xs font-black text-teal-600 uppercase tracking-widest mb-6">Core Strengths</h3>
                       <ul className="space-y-4">
                         {selectedApp.highlights?.strengths?.map((s, i) => (<li key={i} className="text-base font-bold text-slate-800 flex items-start gap-4"><span className="text-teal-500 mt-1.5">•</span> {s}</li>))}
                       </ul>
                     </div>
-                    <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
+                    <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm">
                       <h3 className="text-xs font-black text-red-600 uppercase tracking-widest mb-6">Critical Gaps</h3>
                       <ul className="space-y-4">
                         {selectedApp.highlights?.gaps?.map((g, i) => (<li key={i} className="text-base font-bold text-slate-800 flex items-start gap-4"><span className="text-red-400 mt-1.5">•</span> {g}</li>))}
@@ -169,7 +202,7 @@ export default function Applicants() {
                     <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-8">Screening Diagnostics</h3>
                     <div className="space-y-6">
                       {selectedApp.screening_answers?.length > 0 ? selectedApp.screening_answers.map((item, idx) => (
-                        <div key={idx} className="bg-white border border-slate-100 p-8 rounded-2xl shadow-sm">
+                        <div key={idx} className="bg-white border border-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm">
                           <p className="text-xs font-black text-slate-400 mb-3 uppercase tracking-widest">Q: {item.question}</p>
                           <div className="p-5 bg-teal-50/30 rounded-xl border border-teal-100">
                             <p className="text-base font-black text-teal-900 leading-relaxed">A: {item.answer}</p>

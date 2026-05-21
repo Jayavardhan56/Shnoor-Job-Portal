@@ -8,6 +8,7 @@ export default function StageChat(){
   const{jobId,stage}=location.state||{};
   const[candidates,setCandidates]=useState([]);
   const[selectedCandidate,setSelectedCandidate]=useState(null);
+  const[showChatMobile,setShowChatMobile]=useState(false);
   const[messages,setMessages]=useState([]);
   const[newMessage,setNewMessage]=useState("");
   const[roomId,setRoomId]=useState(null);
@@ -25,6 +26,7 @@ export default function StageChat(){
   };
   const openChat=async(candidate)=>{
     setSelectedCandidate(candidate);
+    setShowChatMobile(true);
     try{
       const res=await api.get(`/api/chat/room/${candidate.id}/`,{headers:{Authorization:`Bearer ${token}`}});
       setRoomId(res.data.room_id);
@@ -73,15 +75,15 @@ export default function StageChat(){
           <p className="text-slate-500 mt-2">Manage candidate conversations for this recruitment stage</p>
         </div>
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-          <div className="p-8 border-b border-slate-100 flex items-center justify-between">
+          <div className="p-8 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold text-slate-900 uppercase font-['Plus_Jakarta_Sans']">{stage} Candidates</h2>
               <p className="text-slate-500 mt-2">Recruitment communication workspace</p>
             </div>
             <div className="px-5 py-2 bg-teal-50 text-teal-600 rounded-xl text-xs font-bold uppercase tracking-widest">{candidates.length} Candidates</div>
           </div>
-          <div className="grid grid-cols-12 min-h-[700px]">
-            <div className="col-span-4 border-r border-slate-100 overflow-y-auto">
+          <div className="flex flex-col lg:grid lg:grid-cols-12 min-h-[700px]">
+            <div className={`col-span-4 border-r border-slate-100 overflow-y-auto ${showChatMobile ? 'hidden lg:block' : 'block'}`}>
               {candidates.length===0?(
                 <div className="p-24 text-center">
                   <h2 className="text-2xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">No Candidates Available</h2>
@@ -96,7 +98,7 @@ export default function StageChat(){
                 ))
               )}
             </div>
-            <div className="col-span-8 flex flex-col">
+            <div className={`col-span-8 flex flex-col ${showChatMobile ? 'flex' : 'hidden lg:flex'}`}>
               {!selectedCandidate?(
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
@@ -107,6 +109,7 @@ export default function StageChat(){
               ):(
                 <>
                   <div className="p-6 border-b border-slate-100">
+                    <button onClick={() => setShowChatMobile(false)} className="lg:hidden mb-4 flex items-center gap-2 text-xs font-bold text-[#2E8B87] hover:underline">← Back to Candidates</button>
                     <h2 className="text-2xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">{selectedCandidate.username}</h2>
                     <p className="text-sm text-slate-500 mt-2">Recruitment Communication</p>
                   </div>
