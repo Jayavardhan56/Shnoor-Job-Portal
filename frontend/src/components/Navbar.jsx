@@ -21,7 +21,9 @@ export default function Navbar(){
           <div className="p-1 rounded-lg border border-slate-200 inline-block" style={{backgroundColor:'#ffffff'}}>
             <img src={logo} alt="Shnoor" className="h-9 w-auto object-contain"/>
           </div>
-          <span className="text-lg sm:text-xl lg:text-2xl font-extrabold text-slate-800 tracking-tighter">Shnoor <span className="text-teal-500 font-medium hidden sm:inline text-sm lg:text-lg ml-1">Job Portal</span></span>
+          <span className="text-sm min-[390px]:text-base sm:text-xl font-extrabold text-slate-800 tracking-tighter whitespace-nowrap">
+              Shnoor <span className="hidden min-[380px]:inline text-slate-400 font-medium text-xs sm:text-sm ml-0.5">Job Portal</span>
+            </span>
         </Link>
         <div className="hidden lg:flex items-center gap-6 xl:gap-10">
           <a href="/#home" className="text-sm font-bold text-slate-600 hover:text-teal-600 transition tracking-wide uppercase">Home</a>
