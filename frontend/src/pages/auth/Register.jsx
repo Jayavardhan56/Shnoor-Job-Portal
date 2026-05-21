@@ -30,17 +30,17 @@ export default function Register(){
     finally{setLoading(false);}
   };
   return(
-    <div className="h-screen bg-white flex overflow-hidden relative">
+    <div className="min-h-screen bg-white flex overflow-hidden relative">
       <button onClick={toggleTheme} className="absolute top-5 right-5 p-2.5 bg-white border border-slate-100 rounded-xl shadow-sm text-slate-500 hover:text-teal-600 transition z-50">
         {theme==="light"?<FaSun size={16}/>:<FaMoon size={16}/>}
       </button>
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-50 items-center justify-center p-16 border-r border-slate-100">
+      <div className="hidden md:flex md:w-1/2 bg-slate-50 items-center justify-center p-8 xl:p-16 border-r border-slate-100">
         <div className="max-w-md">
           <div className="p-2 rounded-xl border border-slate-200 inline-block mb-10" style={{backgroundColor:'#ffffff'}}>
             <img src={logo} alt="Shnoor" className="h-14 w-auto object-contain"/>
           </div>
-          <h1 className="text-5xl font-black text-slate-900 mb-6 leading-tight tracking-tight">SHNOOR <br/><span className="text-teal-600">Job Portal</span></h1>
-          <p className="text-slate-600 text-lg font-medium leading-relaxed mb-10">Create your account to start your recruitment journey. SHNOOR connects talented professionals with industry-leading managers.</p>
+          <h1 className="text-4xl xl:text-5xl font-black text-slate-900 mb-6 leading-tight tracking-tight">SHNOOR <br/><span className="text-teal-600">Job Portal</span></h1>
+          <p className="text-slate-600 text-base xl:text-lg font-medium leading-relaxed mb-10">Create your account to start your recruitment journey. SHNOOR connects talented professionals with industry-leading managers.</p>
           <div className="space-y-4">
             <div className="flex items-center gap-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
               <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-black text-sm">01</div>
@@ -53,13 +53,13 @@ export default function Register(){
           </div>
         </div>
       </div>
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-white">
         <div className="w-full max-w-sm">
           <Link to="/" className="inline-flex items-center gap-2 text-slate-400 font-bold hover:text-teal-600 transition-all text-xs uppercase tracking-widest mb-8">
             <FaArrowLeft size={10}/> Back to Home
           </Link>
           <div className="mb-8">
-            <h2 className="text-4xl font-black text-slate-900 mb-2 tracking-tight">Register</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-2 tracking-tight">Register</h2>
             <p className="text-slate-500 font-medium text-base">Fill in the details to create your profile.</p>
           </div>
           <div className="space-y-4">
@@ -94,7 +94,7 @@ export default function Register(){
               </div>
             </div>
           </div>
-          <button onClick={handleRegister} disabled={loading} className="w-full py-5 bg-primary text-white rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-secondary transition-all shadow-lg active:scale-95 disabled:opacity-50 mt-8">
+          <button onClick={handleRegister} disabled={loading} className="w-full py-4 sm:py-5 bg-primary text-white rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-secondary transition-all shadow-lg active:scale-95 disabled:opacity-50 mt-8">
             {loading?"Creating Profile...":"Register"}
           </button>
           <div className="mt-8 text-center">

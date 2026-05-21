@@ -4,16 +4,16 @@ import UserSidebar from "../components/user/UserSidebar";
 import DashboardNavbar from "../components/DashboardNavbar";
 export default function UserLayout({children}){
   const navigate=useNavigate();
-  const[isSidebarOpen,setIsSidebarOpen]=useState(true);
+  const[isSidebarOpen,setIsSidebarOpen]=useState(false);
   useEffect(()=>{if(!sessionStorage.getItem("token"))navigate("/login");},[navigate]);
   return(
     <div className="min-h-screen bg-[#F8FAFC]">
       <DashboardNavbar onToggleSidebar={()=>setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen}/>
-      <div className="flex pt-[73px]">
-        <div className={`${isSidebarOpen?"w-64":"w-0"} overflow-hidden transition-all duration-300 border-r border-slate-100 bg-white fixed h-[calc(100vh-73px)] top-[73px] z-40`}>
-          <UserSidebar/>
-        </div>
-        <div className={`flex-1 ${isSidebarOpen?"ml-64":"ml-0"} transition-all duration-300 ${children.props?.p0?"p-0":"p-10"}`}>
+      <div className="flex pt-[73px] relative">
+        <div className={`fixed top-[73px] left-0 z-40 h-[calc(100vh-73px)] w-64 overflow-y-auto bg-white border-r border-slate-100 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+        <UserSidebar /> </div>
+        {isSidebarOpen && (<div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setIsSidebarOpen(false)}></div>)}
+        <div className={`flex-1 transition-all duration-300 lg:ml-64 overflow-x-hidden ${children.props?.p0 ? "p-0" : "p-4 sm:p-6 lg:p-10"}`}>
           {children}
         </div>
       </div>
