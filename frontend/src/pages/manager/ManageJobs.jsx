@@ -262,22 +262,22 @@ export default function ManageJobs() {
   return (
     <ManagerLayout>
       <div className="space-y-10">
-        <div className="flex justify-between items-end border-b border-slate-100 pb-10">
+        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end border-b border-slate-100 pb-10 gap-6">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Recruitment Hub</h1>
             <p className="text-slate-500 font-bold text-sm uppercase tracking-widest mt-2">Manage and track your active job pipelines</p>
           </div>
           {selectedJob && (
-            <div className="flex gap-4 relative">
-              <button onClick={() => window.location.href = '/manager/messages'} className="px-6 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary flex items-center gap-3">
+            <div className="flex flex-wrap gap-4 w-full xl:w-auto">
+              <button onClick={() => window.location.href = '/manager/messages'} className="flex-1 sm:flex-initial px-6 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary flex items-center justify-center gap-3">
                 <FaCommentAlt size={14} />
                 Messages
                 {notifCount > 0 && (
                   <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold">{notifCount}</span>
                 )}
               </button>
-              <div className="relative">
-                <button onClick={() => setShowExportOpts(!showExportOpts)} className="px-6 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary flex items-center gap-3">Generate Report <FaChevronDown /></button>
+              <div className="relative flex-1 sm:flex-initial">
+                <button onClick={() => setShowExportOpts(!showExportOpts)} className="w-full px-6 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary flex items-center justify-center gap-3">Generate Report <FaChevronDown /></button>
                 {showExportOpts && (
                   <div className="absolute right-0 mt-3 w-56 bg-white border border-slate-100 rounded-2xl shadow-2xl z-[60] overflow-hidden">
                     <button onClick={() => { downloadReport(); setShowExportOpts(false) }} className="w-full px-6 py-4 text-left text-xs font-bold text-slate-800 hover:bg-teal-50 flex items-center gap-3 border-b border-slate-50"><FaFilePdf className="text-red-500 text-base" /> Professional PDF</button>
@@ -285,12 +285,12 @@ export default function ManageJobs() {
                   </div>
                 )}
               </div>
-              <button onClick={deleteJob} className="px-6 py-4 bg-red-50 text-red-600 border border-red-100 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-600 hover:text-white transition shadow-sm">Delete Role</button>
+              <button onClick={deleteJob} className="flex-1 sm:flex-initial px-6 py-4 bg-red-50 text-red-600 border border-red-100 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-600 hover:text-white transition shadow-sm justify-center flex">Delete Role</button>
             </div>
           )}
         </div>
-        <div className="grid grid-cols-12 gap-10">
-          <div className="col-span-3 space-y-6">
+        <div className="grid grid-cols-12 gap-6 lg:gap-10">
+          <div className="col-span-12 lg:col-span-3 space-y-6">
             <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Job Openings</h2>
             <div className="space-y-3">
               {jobs.map(j => (
@@ -305,20 +305,20 @@ export default function ManageJobs() {
             </div>
             {selectedJobIds.length > 0 && <button onClick={deleteSelectedJobs} className="w-full py-5 bg-red-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-red-100">Delete Selected ({selectedJobIds.length})</button>}
           </div>
-          <div className="col-span-9 space-y-10">
+          <div className="col-span-12 lg:col-span-9 space-y-10">
             {selectedJob ? (
               <div className="space-y-10">
-                <div className="bg-white p-12 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
-                  <div className="flex justify-between items-start mb-10 pb-10 border-b border-slate-100">
+                <div className="bg-white p-5 sm:p-12 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+                  <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-10 pb-10 border-b border-slate-100">
                     <div>
-                      <h2 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">{selectedJob.title}</h2>
+                      <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">{selectedJob.title}</h2>
                       <p className="text-slate-900 font-bold text-base mt-2">{selectedJob.salary}</p>
                     </div>
-                    <button onClick={() => { setIsEditing(true); setEditForm({ title: selectedJob.title, description: selectedJob.description, salary: selectedJob.salary, skills: selectedJob.skills, deadline: selectedJob.deadline }) }} className="px-6 py-3 bg-primary text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-secondary shadow-lg shadow-slate-100">Modify Listing</button>
+                    <button onClick={() => { setIsEditing(true); setEditForm({ title: selectedJob.title, description: selectedJob.description, salary: selectedJob.salary, skills: selectedJob.skills, deadline: selectedJob.deadline }) }} className="w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-secondary shadow-lg shadow-slate-100 text-center">Modify Listing</button>
                   </div>
                   {isEditing ? (
                     <div className="space-y-8">
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Job Title</label>
                           <input className="w-full p-5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-base text-slate-700 outline-none focus:border-teal-500" value={editForm.title} onChange={e => setEditForm({ ...editForm, title: e.target.value })} />
@@ -332,14 +332,14 @@ export default function ManageJobs() {
                         <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Description</label>
                         <textarea className="w-full p-6 bg-slate-50 border border-slate-200 rounded-xl font-medium text-base min-h-[180px] text-slate-700 outline-none focus:border-teal-500 leading-relaxed" value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
                       </div>
-                      <div className="flex gap-4">
-                        <button onClick={handleUpdateJob} className="px-12 py-4 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg">Save Changes</button>
-                        <button onClick={()=>setIsEditing(false)} className="px-12 py-4 bg-slate-100 text-slate-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200">Cancel</button>
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <button onClick={handleUpdateJob} className="w-full sm:w-auto px-12 py-4 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg text-center">Save Changes</button>
+                        <button onClick={()=>setIsEditing(false)} className="w-full sm:w-auto px-12 py-4 bg-slate-100 text-slate-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 text-center">Cancel</button>
                       </div>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-12 gap-12 mt-12">
-                      <div className="col-span-7 space-y-10">
+                    <div className="grid grid-cols-12 gap-8 lg:gap-12 mt-12">
+                      <div className="col-span-12 lg:col-span-7 space-y-10">
                         <div>
                           <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Job Responsibilities</p>
                           <p className="text-slate-700 text-base leading-relaxed font-medium italic whitespace-pre-wrap">"{selectedJob.description}"</p>
@@ -353,7 +353,7 @@ export default function ManageJobs() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-span-5 grid grid-cols-2 gap-y-12 gap-x-8 pt-6">
+                      <div className="col-span-12 lg:col-span-5 grid grid-cols-2 gap-y-8 lg:gap-y-12 gap-x-8 pt-6 lg:pt-0">
                         <div>
                           <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Posted</p>
                           <p className="text-base font-black text-slate-900">{selectedJob.created_at ? new Date(selectedJob.created_at).toLocaleDateString() : 'N/A'}</p>
@@ -396,50 +396,54 @@ export default function ManageJobs() {
                     </button>
                   ))}
                 </div>
-                {activeStatus === 'shortlisted' && (
-                  <div className="bg-white p-10 rounded-2xl border-2 border-slate-100 shadow-sm mt-10 flex items-center gap-10 relative overflow-hidden">
-                    <div className="w-16 h-16 bg-slate-50 text-slate-900 rounded-2xl flex items-center justify-center border border-slate-100"><FaPaperPlane size={24} /></div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">Assessment Link</h3>
-                      <p className="text-slate-500 text-sm mt-1 font-medium">Invite shortlisted candidates to a technical evaluation.</p>
+                 {activeStatus === 'shortlisted' && (
+                  <div className="bg-white p-6 sm:p-10 rounded-2xl border-2 border-slate-100 shadow-sm mt-10 flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 relative overflow-hidden">
+                    <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 bg-slate-50 text-slate-900 rounded-2xl flex items-center justify-center border border-slate-100 shrink-0"><FaPaperPlane size={24} /></div>
+                      <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">Assessment Link</h3>
+                        <p className="text-slate-500 text-sm mt-1 font-medium">Invite shortlisted candidates to a technical evaluation.</p>
+                      </div>
                     </div>
-                    <div className="flex-[1.5] flex gap-4">
+                    <div className="w-full lg:flex-[1.5] flex flex-col sm:flex-row gap-4">
                       <input className="flex-1 px-6 py-4 bg-slate-50 border border-slate-200 rounded-xl text-base font-bold text-slate-700 outline-none focus:border-teal-500" value={assessmentLink} onChange={e => setAssessmentLink(e.target.value)} placeholder="e.g. https://shnoor.com/test-abc" />
-                      <button onClick={triggerAssessment} disabled={sendingAssessment} className="px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary transition-all disabled:opacity-50">{sendingAssessment ? "Sending..." : "Send Now"}</button>
+                      <button onClick={triggerAssessment} disabled={sendingAssessment} className="px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary transition-all disabled:opacity-50 text-center">{sendingAssessment ? "Sending..." : "Send Now"}</button>
                     </div>
                   </div>
                 )}
                 <div className="bg-white rounded-2xl border border-slate-100 shadow-sm mt-12 overflow-hidden relative">
                   {selectedAppIds.length > 0 && (
-                    <div className="absolute top-0 left-0 right-0 bg-white border-b border-slate-100 p-4 flex justify-between items-center z-20 shadow-xl animate-in slide-in-from-top duration-300">
-                      <div className="flex items-center gap-4">
-                        <span className="text-[10px] font-black uppercase tracking-widest bg-slate-50 text-slate-500 px-3 py-1.5 rounded-lg border border-slate-100">{selectedAppIds.length} Selected</span>
-                        <div className="h-4 w-px bg-slate-200" />
-                        <div className="flex gap-2">
-                          <button onClick={() => handleBulkUpdateStatus('shortlisted')} disabled={bulkActionLoading} className="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-slate-200 disabled:opacity-50">Shortlist</button>
-                          <button onClick={() => handleBulkUpdateStatus('interviewing')} disabled={bulkActionLoading} className="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-slate-200 disabled:opacity-50">Interview</button>
-                          <button onClick={()=>handleBulkUpdateStatus('hired')} disabled={bulkActionLoading} className="px-4 py-2 bg-[#2E8B87] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-md disabled:opacity-50">Hire Now</button>
-                          <button onClick={() => handleBulkUpdateStatus('rejected')} disabled={bulkActionLoading} className="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border border-red-100 disabled:opacity-50">Reject</button>
+                    <div className="absolute top-0 left-0 right-0 bg-white border-b border-slate-100 p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 z-20 shadow-xl animate-in slide-in-from-top duration-300">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="text-[10px] font-black uppercase tracking-widest bg-slate-50 text-slate-500 px-3 py-1.5 rounded-lg border border-slate-100 whitespace-nowrap">{selectedAppIds.length} Selected</span>
+                        <div className="hidden sm:block h-4 w-px bg-slate-200" />
+                        <div className="flex flex-wrap gap-2">
+                          <button onClick={() => handleBulkUpdateStatus('shortlisted')} disabled={bulkActionLoading} className="px-3 py-1.5 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all border border-slate-200 disabled:opacity-50">Shortlist</button>
+                          <button onClick={() => handleBulkUpdateStatus('interviewing')} disabled={bulkActionLoading} className="px-3 py-1.5 bg-white text-slate-600 hover:bg-slate-50 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all border border-slate-200 disabled:opacity-50">Interview</button>
+                          <button onClick={()=>handleBulkUpdateStatus('hired')} disabled={bulkActionLoading} className="px-3 py-1.5 bg-[#2E8B87] text-white rounded-lg text-[9px] font-bold uppercase tracking-widest shadow-md disabled:opacity-50">Hire Now</button>
+                          <button onClick={() => handleBulkUpdateStatus('rejected')} disabled={bulkActionLoading} className="px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all border border-red-100 disabled:opacity-50">Reject</button>
                         </div>
                       </div>
-                      <button onClick={() => setSelectedAppIds([])} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-all">Clear Selection</button>
+                      <button onClick={() => setSelectedAppIds([])} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-all shrink-0 self-end sm:self-auto">Clear Selection</button>
                     </div>
                   )}
-                  <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-white">
-                    <div className="flex items-center gap-6">
-                      <input type="checkbox" onChange={toggleSelectAllApps} checked={selectedAppIds.length === apps.filter(a => a.status === activeStatus).length && selectedAppIds.length > 0} className="w-5 h-5 rounded border-slate-300 text-slate-900 focus:ring-slate-900" />
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Candidate</p>
-                    </div>
-                    <div className="flex items-center gap-10">
-                      <button onClick={handleExportStageExcel} disabled={exportingStage} className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-xl font-bold text-[9px] uppercase tracking-widest hover:bg-slate-100 transition-all border border-slate-100 disabled:opacity-50"><FaFileExcel className="text-teal-600" /> {exportingStage ? "Exporting..." : "Export Stage"}</button>
-                      <div className="flex gap-20 mr-4">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI ATS</p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</p>
+                  <div className="overflow-x-auto">
+                    <div className="min-w-[800px]">
+                      <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-white">
+                        <div className="flex items-center gap-6">
+                          <input type="checkbox" onChange={toggleSelectAllApps} checked={selectedAppIds.length === apps.filter(a => a.status === activeStatus).length && selectedAppIds.length > 0} className="w-5 h-5 rounded border-slate-300 text-slate-900 focus:ring-slate-900" />
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Candidate</p>
+                        </div>
+                        <div className="flex items-center gap-10">
+                          <button onClick={handleExportStageExcel} disabled={exportingStage} className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-xl font-bold text-[9px] uppercase tracking-widest hover:bg-slate-100 transition-all border border-slate-100 disabled:opacity-50"><FaFileExcel className="text-teal-600" /> {exportingStage ? "Exporting..." : "Export Stage"}</button>
+                          <div className="flex gap-20 mr-4">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI ATS</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="divide-y divide-slate-50">
-                    {apps.filter(a => a.status === activeStatus).map(a => (
+                      <div className="divide-y divide-slate-50">
+                        {apps.filter(a => a.status === activeStatus).map(a => (
                       <div key={a.id} className={`p-8 flex items-center justify-between hover:bg-slate-50/50 transition-all group ${selectedAppIds.includes(a.id) ? 'bg-teal-50/30' : ''}`}>
                         <div className="flex items-center gap-6 flex-1">
                           <input type="checkbox" checked={selectedAppIds.includes(a.id)} onChange={() => toggleSelectApp(a.id)} className="w-5 h-5 rounded border-slate-300 text-slate-900 focus:ring-slate-900" />
@@ -465,12 +469,8 @@ export default function ManageJobs() {
                           </div>
                         </div>
                       </div>
-                    ))}
-                    {apps.filter(a => a.status === activeStatus).length === 0 && (
-                      <div className="p-20 text-center bg-white">
-                        <p className="text-slate-400 font-bold text-sm uppercase tracking-[4px]">No candidates in this stage</p>
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -485,26 +485,26 @@ export default function ManageJobs() {
         </div>
       </div>
       {showResponses && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[120] flex items-center justify-center p-6">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[120] flex items-center justify-center p-4 sm:p-6">
           <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
-            <div className="p-10 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <div className="p-6 sm:p-10 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <div>
-                <h2 className="text-3xl font-black text-slate-900 font-['Plus_Jakarta_Sans'] tracking-tight">Screening Diagnostics</h2>
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-['Plus_Jakarta_Sans'] tracking-tight">Screening Diagnostics</h2>
                 <p className="text-slate-500 text-sm font-bold uppercase tracking-widest mt-2">Candidate Direct Submissions</p>
               </div>
               <button onClick={() => setShowResponses(null)} className="w-12 h-12 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 transition-all shadow-sm"><FaTimes /></button>
             </div>
-            <div className="p-10 max-h-[70vh] overflow-y-auto custom-scrollbar">
+            <div className="p-6 sm:p-10 max-h-[70vh] overflow-y-auto custom-scrollbar">
               {showResponses?.screening_answers && showResponses.screening_answers.length > 0 ? (
                 <div className="space-y-8">
                   {showResponses.screening_answers.map((item, index) => (
-                    <div key={index} className="border border-slate-100 rounded-2xl p-8 bg-slate-50/30">
+                    <div key={index} className="border border-slate-100 rounded-2xl p-6 sm:p-8 bg-slate-50/30">
                       <p className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#2E8B87]"></div> Question {index + 1}</p>
-                      <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6 shadow-sm">
+                      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 mb-6 shadow-sm">
                         <p className="text-base font-bold text-slate-900 leading-relaxed font-['Plus_Jakarta_Sans']">{item.question}</p>
                       </div>
                       <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Candidate Answer</p>
-                      <div className="bg-slate-50 border border-slate-100 rounded-xl p-6">
+                      <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 sm:p-6">
                         <p className="text-base font-bold text-slate-900 leading-relaxed break-words">{item.answer}</p>
                       </div>
                     </div>
@@ -516,41 +516,41 @@ export default function ManageJobs() {
                 </div>
               )}
             </div>
-            <div className="p-8 border-t border-slate-100 bg-slate-50/30 flex justify-end">
-              <button onClick={() => setShowResponses(null)} className="px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary transition-all shadow-xl">Close Diagnostics</button>
+            <div className="p-6 sm:p-8 border-t border-slate-100 bg-slate-50/30 flex justify-end">
+              <button onClick={() => setShowResponses(null)} className="w-full sm:w-auto px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-secondary transition-all shadow-xl text-center">Close Diagnostics</button>
             </div>
           </div>
         </div>
       )}
       {selectedApp && (
-        <div className="fixed inset-0 bg-slate-500/30 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
+        <div className="fixed inset-0 bg-slate-500/30 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6">
           <div className="bg-white w-full max-w-4xl max-h-[92vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
-            <div className="p-10 border-b border-slate-100 flex justify-between items-center bg-white">
+            <div className="p-6 sm:p-10 border-b border-slate-100 flex justify-between items-center bg-white">
               <div className="flex items-center gap-6">
                 <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-900 border border-slate-100"><FaRobot size={28} /></div>
                 <div>
-                  <h2 className="text-2xl font-black text-slate-900 font-['Plus_Jakarta_Sans'] tracking-tight">Advanced AI Match Report</h2>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-['Plus_Jakarta_Sans'] tracking-tight">Advanced AI Match Report</h2>
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Intelligent Evaluation & Comparison</p>
                 </div>
               </div>
               <button onClick={() => setSelectedApp(null)} className="w-12 h-12 bg-slate-50 border border-slate-200 text-slate-400 hover:text-red-500 rounded-xl flex items-center justify-center transition-all shadow-sm"><FaTimes /></button>
             </div>
-            <div className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar bg-white">
-              <div className="bg-white p-10 rounded-3xl border border-slate-200 relative">
+            <div className="flex-1 overflow-y-auto p-6 sm:p-12 space-y-12 custom-scrollbar bg-white">
+              <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 relative">
                 <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 bg-[#2E8B87] text-white rounded-full text-[10px] font-black uppercase tracking-widest border border-[#2E8B87]">Screening Impacted</div>
                 <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-3">EXECUTIVE SUMMARY & COMPARISON</h3>
                 <p className="text-slate-800 text-base leading-relaxed font-bold whitespace-pre-wrap">"{selectedApp.ai_analysis || 'Analysis pending. Please run a scan.'}"</p>
               </div>
-              <div className="grid grid-cols-3 gap-8">
-                <div className="bg-white p-8 rounded-3xl border border-slate-100 text-center flex flex-col justify-center">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
+                <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 text-center flex flex-col justify-center">
                   <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Technical</p>
                   <p className="text-2xl font-black text-slate-900">{selectedApp.highlights?.ratings?.Technical || 0}/10</p>
                 </div>
-                <div className="bg-white p-8 rounded-3xl border border-slate-100 text-center flex flex-col justify-center">
+                <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 text-center flex flex-col justify-center">
                   <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Experience</p>
                   <p className="text-2xl font-black text-slate-900">{selectedApp.highlights?.ratings?.Experience || 0}/10</p>
                 </div>
-                <div className="bg-[#2E8B87] p-8 rounded-3xl border border-[#2E8B87] text-center flex flex-col justify-center shadow-xl">
+                <div className="bg-[#2E8B87] p-6 sm:p-8 rounded-3xl border border-[#2E8B87] text-center flex flex-col justify-center shadow-xl">
                   <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-4">Overall Score</p>
                   <p className="text-5xl font-black text-white font-['Plus_Jakarta_Sans']">{selectedApp.ats_score}%</p>
                 </div>
@@ -580,9 +580,9 @@ export default function ManageJobs() {
                 </div>
               </div>
             </div>
-            <div className="p-10 bg-slate-50 border-t border-slate-100 flex justify-end gap-5">
-              <button onClick={() => setSelectedApp(null)} className="px-12 py-4 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-100 transition-all">Dismiss</button>
-              <button onClick={handleReanalyze} disabled={loadingReanalyze} className="px-12 py-4 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg flex items-center gap-4">
+            <div className="p-6 sm:p-10 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row justify-end gap-4">
+              <button onClick={() => setSelectedApp(null)} className="w-full sm:w-auto px-12 py-4 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-100 transition-all text-center">Dismiss</button>
+              <button onClick={handleReanalyze} disabled={loadingReanalyze} className="w-full sm:w-auto px-12 py-4 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-4">
                 <FaSync className={loadingReanalyze ? "animate-spin" : ""}/> {loadingReanalyze ? "Analyzing..." : "Run AI Scan"}
               </button>
             </div>

@@ -321,9 +321,9 @@ export default function BrowseJobs(){
                       {j.experience_level&&(<span className="text-[10px] font-bold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-md uppercase tracking-wider">{j.experience_level}</span>)}
                       {j.location&&(<span className="text-[10px] font-bold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-md uppercase tracking-wider">{j.location}</span>)}
                     </div>
-                    <div className="flex items-center gap-4 mb-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                       <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider"><FaClock className="text-teal-500"/>Posted {new Date(j.created_at).toLocaleDateString()}</div>
-                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-red-500 uppercase tracking-wider ml-auto"><FaClock/>Deadline {new Date(j.deadline).toLocaleDateString()}</div>
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-red-500 uppercase tracking-wider"><FaClock/>Deadline {new Date(j.deadline).toLocaleDateString()}</div>
                     </div>
                     <div className="mt-auto flex flex-wrap gap-1.5 mb-6">
                       {j.skills?j.skills.split(',').slice(0,3).map((s,i)=>(<span key={i} className="text-[10px] font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded-md uppercase tracking-wider">{s.trim()}</span>)):null}

@@ -217,7 +217,7 @@ export default function ManageManagers(){
 
             
             <div className="w-full xl:w-[400px] xl:sticky xl:top-12 space-y-8 lg:space-y-12">
-               <div className="text-center p-12 bg-slate-50/40 rounded-[56px] border border-slate-100 shadow-sm">
+               <div className="text-center p-6 sm:p-10 lg:p-12 bg-slate-50/40 rounded-[32px] sm:rounded-[56px] border border-slate-100 shadow-sm">
                   <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[3px] mb-10">Application Stats</h3>
                   <div className="h-[300px] w-full relative">
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">

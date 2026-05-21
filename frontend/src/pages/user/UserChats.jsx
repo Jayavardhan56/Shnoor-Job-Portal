@@ -4,6 +4,7 @@ import UserLayout from "../../layouts/UserLayout";
 export default function UserChats(){
   const[chats,setChats]=useState([]);
   const[selectedChat,setSelectedChat]=useState(null);
+  const[showChatMobile,setShowChatMobile]=useState(false);
   const[messages,setMessages]=useState([]);
   const[newMessage,setNewMessage]=useState("");
   const[rating,setRating]=useState(0);
@@ -108,8 +109,8 @@ export default function UserChats(){
   };
   return(
     <UserLayout>
-      <div className="h-[calc(100vh-40px)] flex gap-6">
-        <div className="w-[340px] bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="h-[calc(100vh-120px)] flex flex-col lg:flex-row gap-6">
+        <div className={`w-full lg:w-[340px] bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden ${showChatMobile ? 'hidden lg:block' : 'block'}`}>
           <div className="p-6 border-b border-slate-100">
             <h2 className="text-2xl font-bold text-slate-900">
               User Chats
@@ -122,7 +123,7 @@ export default function UserChats(){
             {chats.map(chat=>(
               <div
               key={chat.application_id}
-              onClick={()=>setSelectedChat(chat)}
+              onClick={()=>{setSelectedChat(chat);setShowChatMobile(true);}}
               className={`p-5 border-b border-slate-50 cursor-pointer transition-all hover:bg-slate-50 ${
                 selectedChat?.application_id===chat.application_id?"bg-teal-50 border-r-4 border-r-teal-500":""}`}>
                 <h3 className="font-bold text-slate-800">
@@ -135,7 +136,7 @@ export default function UserChats(){
             ))}
           </div>
         </div>
-        <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+        <div className={`flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col ${showChatMobile ? 'flex' : 'hidden lg:flex'}`}>
           {!selectedChat?(
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
@@ -150,6 +151,7 @@ export default function UserChats(){
           ):(
             <>
               <div className="p-6 border-b border-slate-100">
+                <button onClick={() => setShowChatMobile(false)} className="lg:hidden mb-4 flex items-center gap-2 text-xs font-bold text-teal-600 hover:underline">← Back to Chats</button>
                 <h2 className="text-xl font-bold text-slate-800">
                   {selectedChat.manager}
                 </h2>

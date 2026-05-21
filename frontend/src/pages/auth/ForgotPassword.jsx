@@ -46,7 +46,7 @@ export default function ForgotPassword(){
   };
 
   return(
-    <div className="h-screen bg-white flex overflow-hidden relative">
+    <div className="min-h-screen bg-white flex relative">
       <button onClick={toggleTheme} className="absolute top-5 right-5 p-2.5 bg-white border border-slate-100 rounded-xl shadow-sm text-slate-500 hover:text-teal-600 transition z-50">
         {theme==="light"?<FaSun size={16}/>:<FaMoon size={16}/>}
       </button>

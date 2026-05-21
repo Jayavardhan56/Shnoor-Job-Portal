@@ -55,7 +55,7 @@ export default function JobDetails(){
       <div className="max-w-5xl mx-auto py-8 px-4">
         <button onClick={()=>navigate(-1)} className="flex items-center gap-2 text-slate-600 hover:text-teal-600 font-bold text-sm mb-6 transition-colors"><FaArrowLeft/><span>Back to Jobs</span></button>
         <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm mb-6">
-          <div className="flex justify-between items-start">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6">
             <div className="space-y-4">
               <div>
                 <h1 className="text-2xl font-bold text-slate-900 mb-1 font-['Plus_Jakarta_Sans']">{job.title}</h1>
@@ -80,7 +80,7 @@ export default function JobDetails(){
                 <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md uppercase tracking-wider">{job.job_type}</span>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-6">
+            <div className="flex flex-col items-start md:items-end gap-4 md:gap-6 w-full md:w-auto shrink-0">
               <div className="flex gap-3">
                 {applied?(
                   <button disabled className="px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2"><FaCheckCircle/>Applied</button>
@@ -88,8 +88,10 @@ export default function JobDetails(){
                   <button onClick={()=>setShowModal(true)} className="px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-secondary transition-colors shadow-lg">Apply</button>
                 )}
               </div>
-              <p className="text-xs text-slate-400 font-medium">Posted {new Date(job.created_at).toLocaleDateString()}</p>
-              {job.deadline && <p className="text-xs text-red-500 font-bold mt-1">Deadline: {new Date(job.deadline).toLocaleDateString()}</p>}
+              <div>
+                <p className="text-xs text-slate-400 font-medium">Posted {new Date(job.created_at).toLocaleDateString()}</p>
+                {job.deadline && <p className="text-xs text-red-500 font-bold mt-1">Deadline: {new Date(job.deadline).toLocaleDateString()}</p>}
+              </div>
             </div>
           </div>
         </div>
@@ -115,7 +117,7 @@ export default function JobDetails(){
         </div>
         {showModal&&(
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-            <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8">
+            <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 sm:p-8">
               {validQuestions.length>0&&(
                 <div className="flex items-center justify-center gap-3 mb-6">
                   <div className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider ${currentStep===1?'bg-teal-600 text-white':'bg-slate-100 text-slate-500'}`}>1. Resume</div>

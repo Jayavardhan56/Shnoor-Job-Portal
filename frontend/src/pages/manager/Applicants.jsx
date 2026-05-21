@@ -85,15 +85,16 @@ export default function Applicants() {
 
   return (
     <ManagerLayout>
-      <div className="flex justify-between items-end mb-12">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-12">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">System Applicants</h1>
           <p className="text-slate-500 mt-2 text-sm font-bold uppercase tracking-widest">Global candidate directory diagnostics</p>
         </div>
-        <button onClick={downloadAllApplicants} className="px-8 py-4 bg-teal-50 text-teal-600 rounded-2xl font-bold hover:bg-teal-600 hover:text-white transition-all text-xs uppercase tracking-widest border border-teal-100 flex items-center gap-3 shadow-sm"><FaDownload />Export PDF Report</button>
+        <button onClick={downloadAllApplicants} className="w-full sm:w-auto px-8 py-4 bg-teal-50 text-teal-600 rounded-2xl font-bold hover:bg-teal-600 hover:text-white transition-all text-xs uppercase tracking-widest border border-teal-100 flex items-center justify-center gap-3 shadow-sm"><FaDownload />Export PDF Report</button>
       </div>
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <table className="w-full text-left">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[900px]">
           <thead className="bg-slate-50 text-slate-500 uppercase text-xs font-bold tracking-widest border-b border-slate-100">
             <tr>
               <th className="px-10 py-8">Candidate Profile</th>
@@ -128,16 +129,17 @@ export default function Applicants() {
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
       {selectedApp && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-8 backdrop-blur-sm bg-slate-500/20">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 backdrop-blur-sm bg-slate-500/20">
           <div className="bg-white w-full max-w-5xl max-h-[92vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col relative border border-slate-200">
             <button onClick={() => setSelectedApp(null)} className="absolute top-8 right-8 w-12 h-12 bg-slate-50 text-slate-400 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all z-10 flex items-center justify-center shadow-sm"><FaTimes /></button>
-            <div className="p-12 md:p-16 overflow-y-auto custom-scrollbar bg-white">
+            <div className="p-6 sm:p-12 md:p-16 overflow-y-auto custom-scrollbar bg-white">
               <div className="mb-12 border-b border-slate-100 pb-10">
                 <span className="text-teal-600 font-black text-xs uppercase tracking-[4px] mb-3 block">Recruitment Intelligence</span>
-                <h2 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">{selectedApp.username} <span className="text-slate-200 mx-4">/</span> <span className="text-teal-500">{selectedApp.ats_score}% Match</span></h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">{selectedApp.username} <span className="text-slate-200 mx-4">/</span> <span className="text-teal-500">{selectedApp.ats_score}% Match</span></h2>
                 <p className="text-slate-500 font-bold text-base mt-2">{selectedApp.job_title} Candidate</p>
               </div>
               <div className="grid lg:grid-cols-2 gap-12">
@@ -147,7 +149,7 @@ export default function Applicants() {
                     <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">EXECUTIVE SUMMARY & COMPARISON</h3>
                     <p className="text-slate-800 text-base leading-relaxed font-bold italic whitespace-pre-wrap">"{selectedApp.ai_analysis || "Analysis pending calibration."}"</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
                       <h3 className="text-xs font-black text-teal-600 uppercase tracking-widest mb-6">Core Strengths</h3>
                       <ul className="space-y-4">
@@ -176,9 +178,9 @@ export default function Applicants() {
                       )) : (<div className="p-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center"><p className="text-slate-400 font-bold text-sm uppercase tracking-widest italic">No screening data captured</p></div>)}
                     </div>
                   </div>
-                  <div className="pt-10 border-t border-slate-100 flex gap-6">
-                    <a href={`${API_URL}${selectedApp.resume}`} target="_blank" className="flex-1 py-6 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest text-center hover:bg-secondary transition shadow-lg active:scale-95">View Candidate CV</a>
-                    <button onClick={() => setSelectedApp(null)} className="flex-1 py-6 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition">Close Review</button>
+                  <div className="pt-10 border-t border-slate-100 flex flex-col sm:flex-row gap-4">
+                    <a href={`${API_URL}${selectedApp.resume}`} target="_blank" className="flex-1 py-4 sm:py-6 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest text-center hover:bg-secondary transition shadow-lg active:scale-95">View Candidate CV</a>
+                    <button onClick={() => setSelectedApp(null)} className="flex-1 py-4 sm:py-6 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition">Close Review</button>
                   </div>
                 </div>
               </div>

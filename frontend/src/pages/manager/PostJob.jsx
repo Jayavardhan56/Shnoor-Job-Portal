@@ -123,13 +123,13 @@ export default function PostJob(){
   return(
     <ManagerLayout>
       <div className="max-w-5xl mx-auto">
-        <div className="mb-10 flex justify-between items-center">
+        <div className="mb-10 flex flex-col md:flex-row justify-between md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Post a New Role</h1>
             <p className="text-slate-500 mt-1 text-sm font-medium">Define your hiring requirements and start sourcing elite talent.</p>
           </div>
           
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button onClick={()=>setActiveTab(activeTab==="drafts"?"none":"drafts")} className={`px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab==="drafts"?"bg-[#2E8B87] text-white shadow-md":"bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"}`}>
               <FaRegFolder size={14}/>
               <span>DRAFTS ({drafts.length})</span>
@@ -194,12 +194,12 @@ export default function PostJob(){
         )}
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-center gap-10 px-10 pt-8 pb-6 border-b border-slate-100">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10 px-6 sm:px-10 pt-8 pb-6 border-b border-slate-100">
             <div className={`flex items-center gap-3 ${step===1?"text-[#2E8B87]":"text-slate-400"}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step===1?"bg-[#2E8B87] text-white":"bg-slate-100 text-slate-400"}`}>1</div>
               <span className="font-bold text-sm uppercase tracking-wider">Job Details</span>
             </div>
-            <div className="w-20 border-t border-slate-200"></div>
+            <div className="hidden sm:block w-20 border-t border-slate-200"></div>
             <div className={`flex items-center gap-3 ${step===2?"text-[#2E8B87]":"text-slate-400"}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step===2?"bg-[#2E8B87] text-white":"bg-slate-100 text-slate-400"}`}>2</div>
               <span className="font-bold text-sm uppercase tracking-wider">Screening Logic</span>
@@ -207,7 +207,7 @@ export default function PostJob(){
           </div>
 
           {step===1&&(
-            <div className="p-10 space-y-8">
+            <div className="p-5 sm:p-8 lg:p-10 space-y-8">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Job Title*</label>
@@ -275,7 +275,7 @@ export default function PostJob(){
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Schedule Publish (Optional)</label>
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
                     <input type="date" min={getMinDate()} className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900 transition text-base font-bold text-slate-700" value={scheduleDate} onChange={e => setScheduleDate(e.target.value)} />
                     <input type="time" min={scheduleDate===getMinDate()?getCurrentTime():""} className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900 transition text-base font-bold text-slate-700" value={scheduleTime} onChange={handleTimeChange} />
                   </div>
@@ -288,7 +288,7 @@ export default function PostJob(){
               </div>
 
               <div className="pt-4 flex justify-end">
-                <button onClick={()=>setStep(2)} className="px-8 py-4 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg flex items-center gap-2">
+                <button onClick={()=>setStep(2)} className="px-8 py-4 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 w-full sm:w-auto justify-center">
                   <span>Continue to Questions</span>
                   <FaArrowRight size={12}/>
                 </button>
@@ -297,13 +297,13 @@ export default function PostJob(){
           )}
 
           {step===2&&(
-            <div className="p-10 space-y-8">
-              <div className="flex items-center justify-between">
+            <div className="p-5 sm:p-8 lg:p-10 space-y-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Screening Logic</h2>
                   <p className="text-sm text-slate-500 font-medium">Define automated questions to filter candidate suitability.</p>
                 </div>
-                <button onClick={()=>setQuestions([...questions,{question:"",question_type:"mcq",options:["",""],expected_answer:""}])} className="px-6 py-3 bg-[#2E8B87] text-white rounded-xl text-xs font-bold tracking-wider shadow-md uppercase flex items-center gap-2">
+                <button onClick={()=>setQuestions([...questions,{question:"",question_type:"mcq",options:["",""],expected_answer:""}])} className="px-6 py-3 bg-[#2E8B87] text-white rounded-xl text-xs font-bold tracking-wider shadow-md uppercase flex items-center justify-center gap-2 w-full sm:w-auto">
                   <FaPlus size={12}/>
                   <span>Add Question</span>
                 </button>
@@ -376,11 +376,11 @@ export default function PostJob(){
                 ))}
               </div>
 
-              <div className="pt-6 flex justify-between items-center border-t border-slate-100">
-                <button onClick={()=>setStep(1)} className="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition">Back to Details</button>
-                <div className="flex gap-3">
-                  <button onClick={()=>handleSubmit(true)} disabled={submitting} className="px-6 py-3 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition disabled:opacity-50">{submitting ? "Saving..." : "Save as Draft"}</button>
-                  <button onClick={()=>handleSubmit(false)} disabled={submitting} className="px-8 py-3 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md disabled:opacity-50">{submitting ? "Publishing..." : "Publish Role"}</button>
+              <div className="pt-6 flex flex-col sm:flex-row justify-between items-stretch sm:items-center border-t border-slate-100 gap-4">
+                <button onClick={()=>setStep(1)} className="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition text-center">Back to Details</button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button onClick={()=>handleSubmit(true)} disabled={submitting} className="px-6 py-3 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition disabled:opacity-50 text-center">{submitting ? "Saving..." : "Save as Draft"}</button>
+                  <button onClick={()=>handleSubmit(false)} disabled={submitting} className="px-8 py-3 bg-[#2E8B87] text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md disabled:opacity-50 text-center">{submitting ? "Publishing..." : "Publish Role"}</button>
                 </div>
               </div>
             </div>

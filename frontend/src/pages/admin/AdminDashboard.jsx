@@ -81,7 +81,7 @@ export default function AdminDashboard(){
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="bg-white p-10 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm">
           <h2 className="text-lg font-bold mb-10 text-slate-900 tracking-tight flex items-center gap-2 font-['Plus_Jakarta_Sans']">
             <span className="w-2 h-2 bg-teal-500 rounded-full"></span> Manager Performance
           </h2>
@@ -100,7 +100,7 @@ export default function AdminDashboard(){
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
-        <div className="lg:col-span-2 bg-white p-10 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="lg:col-span-2 bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm">
           <h2 className="text-lg font-bold mb-10 text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Demand Intelligence</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 items-center">
             <div className="h-64">

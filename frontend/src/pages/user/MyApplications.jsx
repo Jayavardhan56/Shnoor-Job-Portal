@@ -5,6 +5,7 @@ import {FaStar,FaTimes,FaCommentAlt,FaCheckCircle,FaCheck,FaPaperclip,FaArrowRig
 import EmojiPicker from "emoji-picker-react";
 export default function MyApplications(){const[apps,setApps]=useState([]);
   const[showReviewModal,setShowReviewModal]=useState(false);
+  const[showDetailsMobile,setShowDetailsMobile]=useState(false);
   const[selectedJobId,setSelectedJobId]=useState(null);
   const[ratings,setRatings]=useState({overall:5,technical:5,clarity:5,behavior:5});
   const[reviewText,setReviewText]=useState("");
@@ -99,9 +100,9 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
         <p className="text-slate-500 text-sm mt-1 font-medium">Track your recruitment progress</p>
       </div>
       <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 border border-slate-100 rounded-2xl bg-white overflow-y-auto h-[600px]">
+        <div className={`lg:col-span-1 border border-slate-100 rounded-2xl bg-white overflow-y-auto h-[600px] ${showDetailsMobile ? "hidden lg:block" : "block"}`}>
           <div className="p-4 border-b border-slate-100 font-bold text-slate-800">My Applications</div>
-          {apps.map(a=>(<div key={a.id} onClick={()=>setActiveApp(a)} className={`p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 transition-all flex justify-between items-center ${activeApp?.id === a.id ? "bg-slate-50" : ""}`}>
+          {apps.map(a=>(<div key={a.id} onClick={()=>{setActiveApp(a);setShowDetailsMobile(true);}} className={`p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 transition-all flex justify-between items-center ${activeApp?.id === a.id ? "bg-slate-50" : ""}`}>
               <div>
                 <h3 className="font-bold text-slate-800 text-sm">{a.job_title}</h3>
                 <span className={`inline-block mt-1 px-2 py-0.5 rounded-lg text-[9px] font-bold uppercase tracking-wider ${a.status === 'shortlisted' ? 'bg-teal-50 text-teal-600' : a.status === 'rejected' ? 'bg-red-50 text-red-600' : a.status === 'hired' ? 'bg-teal-600 text-white' : a.status === 'interviewing' ? 'bg-teal-600 text-white' : 'bg-teal-50 text-teal-600'}`}>{a.status === 'pending' ? 'applied' : a.status}</span>
@@ -112,29 +113,32 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
             </div>))}
           {apps.length === 0&&<div className="text-center py-10 text-slate-400 text-sm">No applications found</div>}
         </div>
-        <div className="lg:col-span-2 border border-slate-100 rounded-2xl bg-white flex flex-col h-[600px] relative">
+        <div className={`lg:col-span-2 border border-slate-100 rounded-2xl bg-white flex flex-col h-[600px] relative ${showDetailsMobile ? "flex" : "hidden lg:flex"}`}>
           {activeApp ? (<>
               <div className="p-6 border-b border-slate-100">
+                <button onClick={() => setShowDetailsMobile(false)} className="lg:hidden mb-4 flex items-center gap-2 text-xs font-bold text-teal-600 hover:underline">← Back to Applications</button>
                 <h2 className="text-xl font-bold text-slate-900">{activeApp.job_title}</h2>
                 <p className="text-xs text-slate-500 mt-1">Status: <span className="font-bold uppercase text-teal-600">{activeApp.status === 'pending' ? 'applied' : activeApp.status}</span></p>
               </div>
               <div className="flex-1 p-6 overflow-y-auto space-y-6">
                 <div>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Application Progress</p>
-                    <div className="flex items-center justify-between relative w-full px-4">
-                    <div className="absolute top-4 left-8 right-8 h-0.5 bg-slate-100 z-0"></div>
-                    {(()=>{const stages=['applied','shortlisted','assessment','interviewing','hired'];const cur=activeApp.status;const isRej=cur==='rejected';const statusMap={'pending':0,'applied':0,'shortlisted':1,'assessment_pending':2,'assessment_completed':2,'interviewing':3,'hired':4};const curIdx=statusMap[cur]??-1;return stages.map((step,idx)=>{const stepIdx=stages.indexOf(step);let isComp=stepIdx<=curIdx;let isActive=stepIdx===curIdx;return(<div key={step} className="relative z-10 flex flex-col items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${isRej?'bg-red-500 text-white shadow-lg shadow-red-100':isComp?'bg-teal-600 text-white shadow-lg shadow-teal-100':'bg-white border-2 border-slate-200 text-slate-400'} ${isActive?'ring-4 ring-teal-100':''}`}>{isRej?<FaTimes size={12}/>:isComp?<FaCheck size={10}/>:idx+1}</div>
-                      <span className={`text-[10px] font-bold mt-2 uppercase tracking-wider ${isRej?'text-red-500':isComp?'text-teal-600':'text-slate-400'}`}>{isRej?'Rejected':step}</span>
-                      {isRej&&<div className="absolute top-4 left-1/2 w-full h-0.5 bg-red-500 -z-10"></div>}
-                    </div>);}).slice(0,isRej?1:5);})()}
+                  <div className="overflow-x-auto pb-4 -mx-6 px-6 scrollbar-none">
+                    <div className="flex items-center justify-between relative min-w-[500px] px-4">
+                      <div className="absolute top-4 left-8 right-8 h-0.5 bg-slate-100 z-0"></div>
+                      {(()=>{const stages=['applied','shortlisted','assessment','interviewing','hired'];const cur=activeApp.status;const isRej=cur==='rejected';const statusMap={'pending':0,'applied':0,'shortlisted':1,'assessment_pending':2,'assessment_completed':2,'interviewing':3,'hired':4};const curIdx=statusMap[cur]??-1;return stages.map((step,idx)=>{const stepIdx=stages.indexOf(step);let isComp=stepIdx<=curIdx;let isActive=stepIdx===curIdx;return(<div key={step} className="relative z-10 flex flex-col items-center">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${isRej?'bg-red-500 text-white shadow-lg shadow-red-100':isComp?'bg-teal-600 text-white shadow-lg shadow-teal-100':'bg-white border-2 border-slate-200 text-slate-400'} ${isActive?'ring-4 ring-teal-100':''}`}>{isRej?<FaTimes size={12}/>:isComp?<FaCheck size={10}/>:idx+1}</div>
+                        <span className={`text-[10px] font-bold mt-2 uppercase tracking-wider ${isRej?'text-red-500':isComp?'text-teal-600':'text-slate-400'}`}>{isRej?'Rejected':step}</span>
+                        {isRej&&<div className="absolute top-4 left-1/2 w-full h-0.5 bg-red-500 -z-10"></div>}
+                      </div>);}).slice(0,isRej?1:5);})()}
+                    </div>
                   </div>
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Job Description</p>
                   <p className="text-sm text-slate-600 leading-relaxed">{activeApp.description||"No description provided."}</p>
                 </div>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Skills</p>
                     <p className="text-sm text-slate-600 font-bold">{activeApp.skills||"N/A"}</p>
@@ -144,7 +148,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
                     <p className="text-sm text-slate-600 font-bold">{activeApp.salary||"N/A"}</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Applied</p>
                     <p className="text-sm text-slate-600 font-bold">{activeApp.applied_at?new Date(activeApp.applied_at).toLocaleDateString():"N/A"}</p>
@@ -154,7 +158,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
                     <p className="text-sm text-slate-600 font-bold">{activeApp.deadline?new Date(activeApp.deadline).toLocaleDateString():"N/A"}</p>
                   </div>
                 </div>
-                <div className="pt-4 border-t border-slate-100 flex gap-4">
+                <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-4">
                   {['interviewing','hired'].includes(activeApp.status)&&(<div className="flex-1">{activeApp.reviewed?(<div className="w-full py-3 bg-teal-50 text-teal-600 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-teal-100/50"><FaCheck size={12}/> Interview Reviewed</div>):(<button onClick={()=>{setSelectedJobId(activeApp.job_id);setShowReviewModal(true);}} className="w-full py-3 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-secondary transition-all shadow-lg shadow-slate-100"><FaCommentAlt size={12}/> Rate Experience</button>)}</div>)}
                   <button onClick={()=>handleDeleteApp(activeApp.id)} disabled={isDeleting} className="px-6 py-3 border border-red-100 text-red-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-50 transition-all disabled:opacity-50">{isDeleting ? "Deleting..." : "Delete Application"}</button>
                 </div>
@@ -168,7 +172,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
         </div>
       </div>
       {showReviewModal&&(<div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl p-12 border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl p-6 sm:p-12 border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div className="flex justify-between items-center mb-10 pb-6 border-b border-slate-50">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900">Candidate Feedback</h2>
@@ -189,7 +193,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
             </div>
           </div>
         </div>)}
-      {showChat&&(<div className="fixed bottom-6 right-6 w-96 bg-white rounded-xl shadow-2xl border border-slate-100 flex flex-col h-[500px] z-[100]">
+      {showChat&&(<div className="fixed bottom-0 right-0 left-0 sm:bottom-6 sm:right-6 w-full sm:w-96 bg-white rounded-t-xl sm:rounded-xl shadow-2xl border border-slate-100 flex flex-col h-[80vh] sm:h-[500px] z-[100]">
           <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 p-4">
             <div>
               <h2 className="text-sm font-bold text-black">{selectedAppForChat?.job_title}</h2>

@@ -32,13 +32,13 @@ export default function ManagerNotifications(){
   };
   return(
     <ManagerLayout>
-      <div className="mb-12 flex justify-between items-center">
+      <div className="mb-12 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Notifications</h1>
           <p className="text-slate-500 font-medium text-sm mt-2 uppercase tracking-widest">Manage candidate updates</p>
         </div>
         {selected.length>0&&(
-          <button onClick={deleteSelected} className="px-6 py-3 bg-red-500 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-all shadow-sm flex items-center gap-2"><FaTrash/> Delete ({selected.length})</button>
+          <button onClick={deleteSelected} className="px-6 py-3 bg-red-500 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-all shadow-sm flex items-center gap-2 w-fit"><FaTrash/> Delete ({selected.length})</button>
         )}
       </div>
       <div className="space-y-6">
@@ -49,24 +49,24 @@ export default function ManagerNotifications(){
           </div>
         ):(
           notifications.map(n=>(
-            <div key={n.room_id} className={`bg-white p-6 rounded-2xl border ${n.has_unread?'border-teal-100':'border-slate-100'} shadow-sm flex justify-between items-center hover:shadow-md transition-all`}>
-              <div className="flex items-center gap-6">
-                <input type="checkbox" checked={selected.includes(n.room_id)} onChange={()=>toggleSelect(n.room_id)} className="w-5 h-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" />
-                <div className={`w-12 h-12 ${n.has_unread?'bg-teal-50 text-teal-600':'bg-slate-50 text-slate-400'} rounded-lg flex items-center justify-center border ${n.has_unread?'border-teal-100':'border-slate-100'} relative`}>
+            <div key={n.room_id} className={`bg-white p-6 rounded-2xl border ${n.has_unread?'border-teal-100':'border-slate-100'} shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4 hover:shadow-md transition-all`}>
+              <div className="flex items-start sm:items-center gap-4 sm:gap-6">
+                <input type="checkbox" checked={selected.includes(n.room_id)} onChange={()=>toggleSelect(n.room_id)} className="w-5 h-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500 mt-1 sm:mt-0" />
+                <div className={`w-12 h-12 ${n.has_unread?'bg-teal-50 text-teal-600':'bg-slate-50 text-slate-400'} rounded-lg flex items-center justify-center border ${n.has_unread?'border-teal-100':'border-slate-100'} relative shrink-0`}>
                   <FaCommentAlt size={16}/>
                   {n.has_unread&&<span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>}
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 font-['Plus_Jakarta_Sans']">New Message from {n.username} {n.has_unread&&<span className="text-xs text-teal-600 font-bold ml-2">(New)</span>}</h3>
-                  <p className="text-sm text-slate-500 mt-1">Regarding job: {n.job_title}</p>
+                  <h3 className="text-lg font-bold text-slate-900 font-['Plus_Jakarta_Sans'] break-all">New Message from {n.username} {n.has_unread&&<span className="text-xs text-teal-600 font-bold ml-2">(New)</span>}</h3>
+                  <p className="text-sm text-slate-500 mt-1 break-all">Regarding job: {n.job_title}</p>
                   <p className="text-[10px] text-slate-400 mt-1 font-bold uppercase tracking-wider">{new Date(n.latest_time).toLocaleString([],{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'})}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 self-end md:self-auto">
                 {n.has_unread&&(
                   <button onClick={()=>markAsRead(n.room_id)} className="p-3 bg-teal-50 text-teal-600 rounded-lg hover:bg-teal-100 transition-all border border-teal-100" title="Mark as Read"><FaCheck size={14}/></button>
                 )}
-                <a href="/manager/jobs" className="px-6 py-3 bg-primary text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-secondary transition-all shadow-sm">View Pipeline</a>
+                <a href="/manager/jobs" className="px-6 py-3 bg-primary text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-secondary transition-all shadow-sm whitespace-nowrap">View Pipeline</a>
               </div>
             </div>
           ))

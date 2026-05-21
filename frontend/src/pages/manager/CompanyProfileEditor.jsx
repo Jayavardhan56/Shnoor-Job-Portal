@@ -108,7 +108,7 @@ export default function CompanyProfileEditor(){
         </div>
         <form onSubmit={handleSave} className="grid lg:grid-cols-3 gap-10">
           <div className="lg:col-span-1 space-y-8">
-            <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm text-center flex flex-col items-center">
+            <div className="bg-white p-5 sm:p-6 lg:p-8 rounded-2xl border border-slate-100 shadow-sm text-center flex flex-col items-center">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Corporate Identity Logo</p>
               <div className="relative group w-32 h-32 mb-6">
                 <div className="w-full h-full bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center font-black overflow-hidden shadow-sm">
@@ -127,7 +127,7 @@ export default function CompanyProfileEditor(){
               <h3 className="font-bold text-slate-800 text-base font-['Plus_Jakarta_Sans']">{form.name||"Your Organization"}</h3>
               <p className="text-xs text-slate-400 font-bold mt-1 uppercase tracking-wider">{form.industry||"Industry Type"}</p>
             </div>
-            <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+            <div className="bg-white p-5 sm:p-6 lg:p-8 rounded-2xl border border-slate-100 shadow-sm space-y-6">
               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Company Essentials</h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-slate-600 text-xs font-bold">
@@ -142,7 +142,7 @@ export default function CompanyProfileEditor(){
             </div>
           </div>
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white p-10 rounded-2xl border border-slate-100 shadow-sm space-y-8">
+            <div className="bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm space-y-8">
               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Brand Overview Profile</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -214,7 +214,7 @@ export default function CompanyProfileEditor(){
               </div>
             </div>
 
-            <div className="bg-white p-10 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+            <div className="bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm space-y-6">
               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Team Benefits & Corporate Perks</h3>
               <div className="flex flex-wrap gap-2 mb-4">
                 {benefits.map((b,idx)=>(
@@ -249,7 +249,7 @@ export default function CompanyProfileEditor(){
               </div>
             </div>
 
-            <div className="bg-white p-10 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+            <div className="bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm space-y-6">
               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Cultural Media & Gallery Links</h3>
               <div className="space-y-4 mb-4">
                 {media.map((m,idx)=>(

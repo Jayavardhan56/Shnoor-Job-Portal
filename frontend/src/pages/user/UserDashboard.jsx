@@ -46,7 +46,7 @@ export default function UserDashboard(){
         ))}
       </div>
       <div className="bg-white p-10 rounded-2xl border border-slate-100 shadow-sm">
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Timeline Activity</h2>
           <button onClick={()=>window.location.href='/user/applications'} className="px-6 py-3 bg-slate-50 text-slate-600 rounded-xl text-sm font-bold tracking-widest uppercase hover:bg-slate-100 transition shadow-sm border border-slate-200">View All History</button>
         </div>
@@ -57,7 +57,7 @@ export default function UserDashboard(){
         ):(
           <div className="space-y-6">
             {recent.map((a,i)=>(
-              <div key={i} className="flex justify-between items-center p-8 bg-slate-50 rounded-2xl border border-transparent hover:border-slate-200 hover:bg-white transition shadow-sm">
+              <div key={i} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-8 bg-slate-50 rounded-2xl border border-transparent hover:border-slate-200 hover:bg-white transition shadow-sm">
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">{a.job_title}</h3>
                   <p className="text-slate-400 text-sm mt-2 font-bold uppercase tracking-wider">Application Status</p>

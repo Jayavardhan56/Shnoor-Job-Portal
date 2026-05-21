@@ -40,7 +40,7 @@ export default function UserRatings(){
         <p className="text-slate-500 font-medium text-sm mt-2 uppercase tracking-widest">Aggregate feedback across all recruitment pipelines</p>
       </div>
       <div className="grid lg:grid-cols-3 gap-10 mb-12">
-        <div className="lg:col-span-1 bg-white p-10 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-center">
+        <div className="lg:col-span-1 bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-center">
           <div className="text-center">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Global Satisfaction</p>
             <h2 className="text-4xl font-bold text-teal-600 tracking-tighter font-['Plus_Jakarta_Sans']">{getAvg('overall_rating')}<span className="text-2xl text-slate-300">/10</span></h2>
@@ -50,7 +50,7 @@ export default function UserRatings(){
             <p className="text-slate-500 text-xs font-bold mt-6 uppercase tracking-widest">Based on {reviews.length} Candidate Reviews</p>
           </div>
         </div>
-        <div className="lg:col-span-2 bg-white p-10 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="lg:col-span-2 bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm">
           <div className="flex items-center gap-4 mb-10">
             <div className="p-3 bg-teal-50 text-teal-600 rounded-2xl"><FaChartLine className="text-xl"/></div>
             <h3 className="text-xl font-bold text-slate-900 uppercase tracking-widest font-['Plus_Jakarta_Sans']">Performance Metrics</h3>
@@ -63,15 +63,15 @@ export default function UserRatings(){
         </div>
       </div>
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div className="p-8 border-b border-slate-50 bg-slate-50/30">
+        <div className="p-5 sm:p-8 border-b border-slate-50 bg-slate-50/30">
           <h3 className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em]">Individual Candidate Feedback</h3>
         </div>
         <div className="divide-y divide-slate-50">
           {reviews.map(r=>(
-            <div key={r.id} className="p-12 hover:bg-slate-50/50 transition-all group">
-              <div className="flex flex-col md:flex-row md:items-start justify-between gap-8">
+            <div key={r.id} className="p-5 sm:p-8 lg:p-12 hover:bg-slate-50/50 transition-all group">
+              <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
                 <div className="flex gap-6">
-                  <div className="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center font-bold text-xl shadow-xl shadow-teal-100 uppercase overflow-hidden">
+                  <div className="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center font-bold text-xl shadow-xl shadow-teal-100 uppercase overflow-hidden shrink-0">
                     {r.photo?<img src={`${API_URL}${r.photo}`} className="w-full h-full object-cover"/>:r.username[0]}
                   </div>
                   <div>
@@ -82,7 +82,7 @@ export default function UserRatings(){
                     <p className="text-slate-400 text-[10px] font-bold uppercase mt-2">{new Date(r.date).toLocaleDateString()}</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 flex-1 max-w-3xl">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 flex-1 max-w-3xl">
                   {[
                     {l:'Tech',v:r.technical_difficulty},
                     {l:'Clarity',v:r.process_clarity},
@@ -96,7 +96,7 @@ export default function UserRatings(){
                   ))}
                 </div>
               </div>
-              <div className="mt-10 bg-slate-50/80 p-8 rounded-2xl border border-slate-100/50 relative">
+              <div className="mt-8 sm:mt-10 bg-slate-50/80 p-5 sm:p-8 rounded-2xl border border-slate-100/50 relative">
                 <FaCommentDots className="absolute -top-3 -left-3 text-teal-400 text-3xl bg-white rounded-full p-1 shadow-sm border border-slate-50"/>
                 <p className="text-slate-600 text-sm font-bold italic leading-relaxed">"{r.text}"</p>
               </div>

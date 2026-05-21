@@ -116,7 +116,7 @@ return(
 
             <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-8">
 
-                <div className="flex gap-7">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-7">
 
                     <div className="w-32 h-32 rounded-[22px] overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
 
@@ -134,15 +134,15 @@ return(
 
                     <div>
 
-                        <h1 className="text-[56px] leading-[58px] font-extrabold text-slate-900">
+                        <h1 className="text-3xl sm:text-4xl md:text-[56px] md:leading-[58px] font-extrabold text-slate-900">
                             {profile.name}
                         </h1>
 
-                        <p className="text-[28px] text-teal-600 font-semibold mt-2">
+                        <p className="text-xl sm:text-2xl md:text-[28px] text-teal-600 font-semibold mt-2">
                             {profile.headline || "Professional Candidate"}
                         </p>
 
-                        <div className="flex flex-wrap gap-6 mt-6 text-[15px] text-slate-600 font-medium">
+                        <div className="flex flex-wrap justify-center sm:justify-start gap-6 mt-6 text-[15px] text-slate-600 font-medium">
 
                             <div className="flex items-center gap-2">
                                 <FaEnvelope className="text-teal-500"/>
@@ -170,7 +170,7 @@ return(
 
                         </div>
 
-                        <div className="flex items-center gap-3 mt-6">
+                        <div className="flex items-center justify-center sm:justify-start gap-3 mt-6">
 
                             {profile.social_links?.linkedin&&(
 
@@ -217,9 +217,9 @@ return(
 
                 </div>
 
-                <div className="xl:text-right">
+                <div className="xl:text-right text-center">
 
-                    <div className="flex items-center gap-2 xl:justify-end text-teal-600 mb-2">
+                    <div className="flex items-center gap-2 xl:justify-end justify-center text-teal-600 mb-2">
                         <FaIdBadge size={14}/>
                         <span className="text-[11px] uppercase tracking-[1px] font-semibold">
                             User Identifier
