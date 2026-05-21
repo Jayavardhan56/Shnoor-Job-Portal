@@ -1,4 +1,4 @@
-import {FaSun,FaMoon,FaBars,FaTimes} from "react-icons/fa";
+import {FaSun,FaMoon,FaChevronLeft,FaChevronRight,FaBars,FaTimes} from "react-icons/fa";
 import {useEffect,useState} from "react";
 import {Link} from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -33,7 +33,7 @@ export default function DashboardNavbar({onToggleSidebar,isSidebarOpen}){
           </Link>
         </div>
         <button onClick={onToggleSidebar} className="hidden lg:flex text-slate-400 hover:text-slate-900 transition-colors p-1 cursor-pointer shrink-0">
-          {isSidebarOpen?<FaTimes size={16}/>:<FaBars size={16}/>}
+          {isSidebarOpen?<FaChevronLeft size={16}/>:<FaChevronRight size={16}/>}
         </button>
       </div>
       <div className="flex-1 px-4 sm:px-6 lg:px-8 flex justify-end items-center h-full">
