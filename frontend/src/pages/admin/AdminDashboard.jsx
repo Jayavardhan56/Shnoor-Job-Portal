@@ -36,30 +36,30 @@ export default function AdminDashboard(){
 
   return(
     <AdminLayout>
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8 lg:mb-10">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">System Intelligence</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">System Intelligence</h1>
           <p className="text-slate-500 text-sm mt-1 uppercase tracking-[2px] font-medium">Real-time Platform Performance</p>
         </div>
       </div>
-      <div className="grid md:grid-cols-4 gap-8 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-10 lg:mb-12">
         {[
           {label:"Global Users",val:stats.total_users,icon:"👥"},
           {label:"Active Postings",val:stats.total_jobs,icon:"💼"},
           {label:"Total Intent",val:stats.total_apps,icon:"📝"},
           {label:"Successful Hires",val:stats.total_hires,icon:"✅"}
         ].map((s,i)=>(
-          <div key={i} className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+          <div key={i} className="bg-white p-5 sm:p-6 lg:p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start mb-4">
               <span className="text-2xl">{s.icon}</span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.label}</span>
             </div>
-            <p className="text-4xl font-bold text-slate-900 tracking-tighter font-['Plus_Jakarta_Sans']">{s.val}</p>
+            <p className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tighter font-['Plus_Jakarta_Sans']">{s.val}</p>
           </div>
         ))}
       </div>
-      <div className="grid lg:grid-cols-2 gap-10 mb-10">
-        <div className="bg-white p-10 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 mb-10">
+        <div className="bg-white p-5 sm:p-6 lg:p-10 rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
           <h2 className="text-lg font-bold mb-10 text-slate-900 tracking-tight flex items-center gap-2 font-['Plus_Jakarta_Sans']">
             <span className="w-2 h-2 bg-teal-500 rounded-full"></span> Monthly Platform Growth
           </h2>
@@ -99,10 +99,10 @@ export default function AdminDashboard(){
           </div>
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
         <div className="lg:col-span-2 bg-white p-10 rounded-2xl border border-slate-100 shadow-sm">
           <h2 className="text-lg font-bold mb-10 text-slate-900 tracking-tight font-['Plus_Jakarta_Sans']">Demand Intelligence</h2>
-          <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 items-center">
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -126,11 +126,11 @@ export default function AdminDashboard(){
             </div>
           </div>
         </div>
-        <div className="bg-teal-500 p-10 rounded-2xl border border-teal-100 flex flex-col justify-center items-center text-center relative overflow-hidden text-white">
+        <div className="bg-teal-500 p-6 sm:p-8 lg:p-10 rounded-2xl border border-teal-100 flex flex-col justify-center items-center text-center relative overflow-hidden text-white">
           <div className="absolute top-0 right-0 w-40 h-40 bg-teal-200/20 rounded-full -mr-20 -mt-20"></div>
           <div className="relative z-10">
             <h2 className="text-sm font-bold mb-6 text-teal-100 tracking-[4px] uppercase">Efficiency</h2>
-            <p className="text-7xl font-bold tracking-tighter mb-4 text-white">
+            <p className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter mb-4 text-white">
               {stats.total_apps?Math.floor((stats.total_hires/stats.total_apps)*100):0}%
             </p>
             <p className="text-teal-100 text-xs font-bold uppercase tracking-widest">Hiring Success Rate</p>

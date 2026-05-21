@@ -22,18 +22,18 @@ export default function Conversion(){
 
   return(
     <AdminLayout>
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">Conversion Funnel</h1>
+      <div className="mb-6 lg:mb-10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">Conversion Funnel</h1>
         <p className="text-slate-500 mt-1 text-sm uppercase tracking-widest">Efficiency through the pipeline</p>
       </div>
-      <div className="grid md:grid-cols-12 gap-10">
-        <div className="md:col-span-8 bg-white border border-slate-100 rounded-2xl p-12 shadow-sm">
-          <h2 className="text-xl font-bold text-slate-900 mb-12 font-['Plus_Jakarta_Sans']">Hiring Pipeline Flow</h2>
-          <div className="space-y-16">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 lg:gap-10">
+        <div className="xl:col-span-8 bg-white border border-slate-100 rounded-2xl p-5 sm:p-8 lg:p-12 shadow-sm overflow-hidden">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-8 lg:mb-12 font-['Plus_Jakarta_Sans']">Hiring Pipeline Flow</h2>
+          <div className="space-y-10 lg:space-y-16">
             <div>
-              <div className="flex justify-between items-end mb-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-4">
                 <div>
-                  <p className="text-4xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">{stats.total_apps}</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-slate-900 font-['Plus_Jakarta_Sans']">{stats.total_apps}</p>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[2px] mt-2">Total Applications</p>
                 </div>
                 <span className="text-[10px] font-bold text-slate-400">100% POOL</span>
@@ -43,9 +43,9 @@ export default function Conversion(){
               </div>
             </div>
             <div>
-              <div className="flex justify-between items-end mb-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-4">
                 <div>
-                  <p className="text-4xl font-bold text-teal-600">{stats.total_shortlisted}</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-teal-600">{stats.total_shortlisted}</p>
                   <p className="text-[10px] font-bold text-teal-400 uppercase tracking-[2px] mt-2">Shortlisted Candidates</p>
                 </div>
                 <span className="text-[10px] font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full">{shortRate}% RATE</span>
@@ -55,9 +55,9 @@ export default function Conversion(){
               </div>
             </div>
             <div>
-              <div className="flex justify-between items-end mb-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-4">
                 <div>
-                  <p className="text-4xl font-bold text-teal-500">{stats.total_hires}</p>
+                  <p className="text-3xl sm:text-4xl font-bold text-teal-500">{stats.total_hires}</p>
                   <p className="text-[10px] font-bold text-teal-400 uppercase tracking-[2px] mt-2">Final Successful Hires</p>
                 </div>
                 <span className="text-[10px] font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full">{hireRate}% CONVERSION</span>
@@ -68,12 +68,12 @@ export default function Conversion(){
             </div>
           </div>
         </div>
-        <div className="md:col-span-4 space-y-8">
-          <div className="bg-teal-500 rounded-2xl p-10 border border-teal-100 flex flex-col justify-center items-center text-center text-white">
-            <h3 className="text-5xl font-bold mb-4 text-white">{hireRate}%</h3>
+        <div className="xl:col-span-4 space-y-6 lg:space-y-8">
+          <div className="bg-teal-500 rounded-2xl p-6 sm:p-8 lg:p-10 border border-teal-100 flex flex-col justify-center items-center text-center text-white">
+            <h3 className="text-4xl sm:text-5xl font-bold mb-4 text-white">{hireRate}%</h3>
             <p className="text-teal-100 text-[10px] font-bold uppercase tracking-[3px]">Conversion Success</p>
           </div>
-          <div className="bg-white border border-slate-100 rounded-2xl p-10 shadow-sm">
+          <div className="bg-white border border-slate-100 rounded-2xl p-5 sm:p-6 lg:p-10 shadow-sm">
             <h3 className="text-slate-400 text-[10px] font-bold uppercase tracking-[2px] mb-6">Drop-off Insights</h3>
             <div className="space-y-6">
               <div className="flex justify-between">
