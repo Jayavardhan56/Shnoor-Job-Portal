@@ -292,28 +292,28 @@ export default function ManageManagers(){
           <div className="divide-y divide-slate-100">
             {filteredJobs.length===0 && <div className="p-20 text-center text-slate-400 font-bold uppercase tracking-widest text-sm">No jobs found matching "{jSearch}".</div>}
             {filteredJobs.map(job=>(
-              <div key={job.id} className={`flex flex-col xl:flex-row xl:items-center justify-between gap-8 py-8 lg:py-10 group px-6 hover:bg-slate-50/30 transition-all ${selJ.includes(job.id) ? 'bg-teal-50/30' : ''}`}>
-                <div className="flex items-center gap-8">
+              <div key={job.id} className={`flex flex-col xl:flex-row xl:items-center justify-between gap-6 py-6 lg:py-10 group px-4 sm:px-6 hover:bg-slate-50/30 transition-all ${selJ.includes(job.id) ? 'bg-teal-50/30' : ''}`}>
+                <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
                   <input 
                     type="checkbox" 
                     checked={selJ.includes(job.id)} 
                     onChange={()=>toggleJ(job.id)}
-                    className="w-5 h-5 accent-teal-600 cursor-pointer"
+                    className="w-5 h-5 accent-teal-600 cursor-pointer shrink-0"
                   />
-                  <div className="text-teal-600 opacity-40 group-hover:opacity-100 transition-all"><FaBriefcase size={24}/></div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-teal-600 transition-colors">{job.title}</h3>
-                    <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mt-1.5">ID: #JOB-{job.id} • Posted on {new Date(job.created_at).toLocaleDateString()}</p>
+                  <div className="text-teal-600 opacity-40 group-hover:opacity-100 transition-all shrink-0"><FaBriefcase size={20}/></div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-xl font-bold text-slate-900 group-hover:text-teal-600 transition-colors truncate">{job.title}</h3>
+                    <p className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider mt-1">ID: #JOB-{job.id} • Posted on {new Date(job.created_at).toLocaleDateString()}</p>
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 lg:gap-16 w-full xl:w-auto">
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-slate-900">{job.stats.total}</p>
-                    <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Applications</p>
+                <div className="flex flex-row items-center justify-between gap-6 w-full xl:w-auto border-t border-slate-100 pt-4 xl:pt-0 xl:border-0">
+                  <div className="text-left sm:text-center">
+                    <p className="text-2xl sm:text-3xl font-bold text-slate-900 leading-none">{job.stats.total}</p>
+                    <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Applications</p>
                   </div>
-                  <div className="flex items-center gap-8">
-                    <button onClick={()=>setSelectedJob(job)} className="text-sm font-bold text-teal-600 uppercase tracking-widest border-b-2 border-transparent hover:border-teal-600 pb-2 transition-all">Analytics</button>
-                    <button onClick={()=>deleteJob(job.id)} className="text-sm font-bold text-red-500 uppercase tracking-widest border-b-2 border-transparent hover:border-red-500 pb-2 transition-all">Delete</button>
+                  <div className="flex items-center gap-4 sm:gap-8">
+                    <button onClick={()=>setSelectedJob(job)} className="text-xs sm:text-sm font-bold text-teal-600 uppercase tracking-widest border-b border-transparent hover:border-teal-600 pb-1 transition-all">Analytics</button>
+                    <button onClick={()=>deleteJob(job.id)} className="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-widest border-b border-transparent hover:border-red-500 pb-1 transition-all">Delete</button>
                   </div>
                 </div>
               </div>

@@ -113,7 +113,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
             </div>))}
           {apps.length === 0&&<div className="text-center py-10 text-slate-400 text-sm">No applications found</div>}
         </div>
-        <div className={`lg:col-span-2 border border-slate-100 rounded-2xl bg-white flex flex-col h-[600px] relative ${showDetailsMobile ? "flex" : "hidden lg:flex"}`}>
+        <div className={`lg:col-span-2 border border-slate-100 rounded-2xl bg-white flex flex-col h-[600px] relative w-full min-w-0 ${showDetailsMobile ? "flex" : "hidden lg:flex"}`}>
           {activeApp ? (<>
               <div className="p-6 border-b border-slate-100">
                 <button onClick={() => setShowDetailsMobile(false)} className="lg:hidden mb-4 flex items-center gap-2 text-xs font-bold text-teal-600 hover:underline">← Back to Applications</button>
@@ -193,7 +193,7 @@ export default function MyApplications(){const[apps,setApps]=useState([]);
             </div>
           </div>
         </div>)}
-      {showChat&&(<div className="fixed bottom-0 right-0 left-0 sm:bottom-6 sm:right-6 w-full sm:w-96 bg-white rounded-t-xl sm:rounded-xl shadow-2xl border border-slate-100 flex flex-col h-[80vh] sm:h-[500px] z-[100]">
+      {showChat&&(<div className="fixed bottom-0 right-0 left-0 sm:bottom-6 sm:right-6 sm:left-auto max-w-full w-full sm:w-96 bg-white rounded-t-xl sm:rounded-xl shadow-2xl border border-slate-100 flex flex-col h-[80vh] sm:h-[500px] z-[100] overflow-hidden">
           <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 p-4">
             <div>
               <h2 className="text-sm font-bold text-black">{selectedAppForChat?.job_title}</h2>

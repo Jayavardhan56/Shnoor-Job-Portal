@@ -20,7 +20,7 @@ export default function UserLayout({children}){
           <UserSidebar />
         </div>
         {isSidebarOpen && (<div className="fixed inset-0 bg-black/40 z-30 md:hidden" onClick={() => setIsSidebarOpen(false)}></div>)}
-        <div className={`flex-1 transition-all duration-300 ${isSidebarOpen?"md:ml-64 ml-0":"ml-0"} ${children.props?.p0 ? "p-0" : "p-4 md:p-10"}`}>
+        <div className={`flex-1 min-w-0 overflow-x-hidden transition-all duration-300 ${isSidebarOpen?"md:ml-64 ml-0":"ml-0"} ${children.props?.p0 ? "p-0" : "p-4 md:p-10"}`}>
           {children}
         </div>
       </div>

@@ -121,7 +121,7 @@ export default function Profile() {
 
   return (
     <UserLayout>
-      <div className="w-full min-h-[calc(100vh-73px)] bg-white flex flex-col font-sans">
+      <div className="w-full min-h-[calc(100vh-73px)] bg-white flex flex-col font-sans overflow-hidden">
         <div className="px-4 md:px-8 py-4 md:py-6 border-b border-slate-200 flex justify-between items-center bg-white sticky top-0 z-10">
           <div>
             <h1 className="text-2xl font-bold text-slate-900">User Profile</h1>
@@ -129,7 +129,7 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row flex-1">
+        <div className="flex flex-col md:flex-row flex-1 min-w-0">
           <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate-200 bg-white p-4 flex flex-col shrink-0">
             <div className="px-4 py-3 mb-4 md:mb-6">
               <div className="flex justify-between items-center mb-2">
@@ -154,7 +154,7 @@ export default function Profile() {
             </div>
           </div>
 
-          <div className="flex-1 p-4 md:p-10 max-w-5xl">
+          <div className="flex-1 p-4 md:p-10 max-w-5xl w-full min-w-0">
             {activeTab === "Personal Details" && (
               <div className="space-y-10">
                 <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-8 pb-10 border-b border-slate-200">

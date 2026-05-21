@@ -19,7 +19,7 @@ export default function AdminLayout({children}){
         <div className={`fixed top-[73px] left-0 z-40 h-[calc(100vh-73px)] w-64 overflow-y-auto bg-white border-r border-slate-100 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <AdminSidebar /> </div>
         {isSidebarOpen && (<div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setIsSidebarOpen(false)}></div>)}
-        <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "lg:ml-64 ml-0" : "ml-0"} p-4 sm:p-6 lg:p-10 overflow-x-hidden`}>
+        <div className={`flex-1 min-w-0 overflow-x-hidden transition-all duration-300 ${isSidebarOpen ? "lg:ml-64 ml-0" : "ml-0"} p-4 sm:p-6 lg:p-10`}>
           {children}
         </div>
       </div>
